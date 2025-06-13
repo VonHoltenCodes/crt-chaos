@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chaos Management</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/crt.css">
+    <link rel="stylesheet" href="css/chaos-engine.css">
+</head>
+<body>
+    <div style="padding: 50px; text-align: center;">
+        <h1>Chaos Management Test</h1>
+        <p>Press ESC to open the panic menu</p>
+        <p>Or use keyboard shortcuts:</p>
+        <ul style="list-style: none;">
+            <li>Ctrl+Shift+C - Quick Calm</li>
+            <li>Ctrl+Shift+R - Emergency Reset</li>
+        </ul>
+        
+        <div style="margin-top: 30px;">
+            <button onclick="window.chaos.chaosLevel = 10; window.chaos.showNotification('Chaos Level: MAXIMUM')">Set Max Chaos</button>
+            <button onclick="window.chaos.triggerRandomGlitch()">Trigger Glitch</button>
+            <button onclick="window.chaos.switchTheme()">Switch Theme</button>
+        </div>
+    </div>
+    
+    <script src="js/chaos-core.js"></script>
+    <script>
+        // Test that functions exist
+        setTimeout(() => {
+            console.log('Chaos management functions available:');
+            console.log('showPanicMenu:', typeof window.chaos.showPanicMenu);
+            console.log('calmDown:', typeof window.chaos.calmDown);
+            console.log('stopAllGlitches:', typeof window.chaos.stopAllGlitches);
+            console.log('resetTheme:', typeof window.chaos.resetTheme);
+            console.log('emergencyReset:', typeof window.chaos.emergencyReset);
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "website-puzzle",
+  "version": "1.0.0",
+  "description": "Interactive web development puzzles and challenges",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "puzzle",
+    "web development",
+    "challenges",
+    "interactive",
+    "learning"
+  ],
+  "author": "vonholtencodes",
+  "license": "MIT"
+}

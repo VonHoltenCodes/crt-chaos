@@ -1,0 +1,66 @@
+/* Back to Top Button Styles */
+#back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    z-index: 90;
+    font-size: 1.2rem;
+}
+
+#back-to-top.show {
+    opacity: 0.9;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#back-to-top:hover {
+    background-color: var(--dark-accent);
+    color: var(--secondary-color);
+    box-shadow: 0 0 15px var(--primary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Arrow styling */
+#back-to-top .arrow-up {
+    font-size: 24px;
+    font-weight: bold;
+    display: block;
+    position: relative;
+    animation: bounce 2s infinite;
+}
+
+/* Bounce animation for the arrow */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    #back-to-top {
+        width: 40px;
+        height: 40px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 1rem;
+    }
+}

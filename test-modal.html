@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modal Test</title>
+    <style>
+        .test-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .test-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .show {
+            display: flex !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Modal Test</h1>
+    <button onclick="showModal()">Show Modal</button>
+    
+    <div id="test-modal" class="test-modal">
+        <div class="test-content">
+            <h2>Modal Works!</h2>
+            <button onclick="hideModal()">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        function showModal() {
+            console.log('Showing modal...');
+            document.getElementById('test-modal').classList.add('show');
+        }
+        
+        function hideModal() {
+            console.log('Hiding modal...');
+            document.getElementById('test-modal').classList.remove('show');
+        }
+    </script>
+</body>
+</html>

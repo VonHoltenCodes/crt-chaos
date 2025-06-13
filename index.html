@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRT CHAOS - System Malfunction Detected</title>
+    <meta name="description" content="WARNING: System unstable. Debug the chaos to restore functionality.">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/crt.css">
+    <link rel="stylesheet" href="css/chaos-engine.css">
+    <link rel="stylesheet" href="css/back-to-top.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- Hydraulic Background -->
+    <div id="hydraulic-background" class="hydraulic-background"></div>
+    
+    <!-- CRT Effect Container -->
+    <div class="crt-effect"></div>
+    
+    <!-- Mobile Warning -->
+    <div class="mobile-warning" id="mobile-warning" style="display: none;">
+        <h2 class="glitch-text" data-text="SYSTEM ERROR: MOBILE DETECTED">SYSTEM ERROR: MOBILE DETECTED</h2>
+        <p>This chaos requires a proper terminal (desktop/laptop).</p>
+        <p>Mobile agents will be terminated.</p>
+        <button onclick="proceedAnyway()">I ACCEPT THE CHAOS</button>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="nav-wrapper">
+                <a href="/" class="logo retro-text">
+                    <span class="logo-text glitch-text" data-text="CRT CHAOS">CRT CHAOS</span>
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#terminal" class="nav-link">Terminal</a></li>
+                    <li><a href="#puzzles" class="nav-link">Systems</a></li>
+                    <li><a href="#status" class="nav-link">Status</a></li>
+                    <li><a href="#help" class="nav-link">H̸͎̅Ë̵́ͅL̶̲̈P̷̱̾</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <pre class="ascii-logo">
+ ██████╗██████╗ ████████╗     ██████╗██╗  ██╗ █████╗  ██████╗ ███████╗
+██╔════╝██╔══██╗╚══██╔══╝    ██╔════╝██║  ██║██╔══██╗██╔═══██╗██╔════╝
+██║     ██████╔╝   ██║       ██║     ███████║███████║██║   ██║███████╗
+██║     ██╔══██╗   ██║       ██║     ██╔══██║██╔══██║██║   ██║╚════██║
+╚██████╗██║  ██║   ██║       ╚██████╗██║  ██║██║  ██║╚██████╔╝███████║
+ ╚═════╝╚═╝  ╚═╝   ╚═╝        ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
+</pre>
+                <h1 class="hero-title retro-text neon-glow">
+                    <span class="glitch-text" data-text="SYSTEM CRITICAL • MULTIPLE FAILURES DETECTED">SYSTEM CRITICAL • MULTIPLE FAILURES DETECTED</span>
+                </h1>
+                <div class="system-status-inline">
+                    <span class="status-item">BOOT: <span class="status-value">CORRUPTED</span></span>
+                    <span class="status-divider">|</span>
+                    <span class="status-item">STABILITY: <span class="status-value" id="stability-percent">15%</span></span>
+                    <span class="status-divider">|</span>
+                    <span class="status-item">CHAOS: <span class="status-value" id="chaos-level">CRITICAL</span></span>
+                </div>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="initializeDiagnostics()">RUN DIAGNOSTICS</button>
+                    <button class="btn btn-secondary" onclick="showTerminal()">ACCESS TERMINAL</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Terminal -->
+    <section id="terminal" class="terminal-section" style="display: none;">
+        <div class="container">
+            <div class="terminal-container main-terminal">
+                <div class="terminal-header">
+                    <span class="terminal-title">SYSTEM TERMINAL v0.1.337</span>
+                    <div class="terminal-controls">
+                        <span class="terminal-control close"></span>
+                        <span class="terminal-control minimize"></span>
+                        <span class="terminal-control maximize"></span>
+                    </div>
+                </div>
+                <div class="terminal-body" id="main-terminal">
+                    <div class="terminal-output" id="terminal-output">
+                        <p style="color: #00ff00">CRT CHAOS TERMINAL v0.1.337</p>
+                        <p>===============================</p>
+                        <p>WARNING: Multiple system failures detected</p>
+                        <p>Chaos level approaching critical threshold</p>
+                        <p></p>
+                        <p>Type 'help' for available commands.</p>
+                        <p>Type 'status' to check system health.</p>
+                    </div>
+                    <div class="terminal-input-line">
+                        <span class="prompt">chaos@crt:~$ </span>
+                        <input type="text" class="terminal-input" id="terminal-input" autofocus>
+                        <span class="cursor"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Puzzle Grid -->
+    <section id="puzzles" class="services">
+        <div class="container">
+            <h2 class="section-title retro-text glitch-text" data-text="MALFUNCTIONING SYSTEMS">MALFUNCTIONING SYSTEMS</h2>
+            <div class="services-grid" id="puzzle-grid">
+                <!-- Puzzles will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- System Status -->
+    <section id="status" class="testimonials">
+        <div class="container">
+            <h2 class="section-title retro-text">SYSTEM DIAGNOSTICS</h2>
+            <div class="diagnostics-container retro-border">
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">Memory Integrity:</span>
+                    <span class="diagnostic-value">██████░░░░ 63%</span>
+                </div>
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">Core Stability:</span>
+                    <span class="diagnostic-value">███░░░░░░░ 31%</span>
+                </div>
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">Input/Output:</span>
+                    <span class="diagnostic-value">████████░░ 84%</span>
+                </div>
+                <div class="diagnostic-item">
+                    <span class="diagnostic-label">Time Sync:</span>
+                    <span class="diagnostic-value">█░░░░░░░░░ ERROR</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Tracker -->
+    <section id="progress" class="cta">
+        <div class="container">
+            <h2 class="section-title retro-text">REPAIR PROGRESS</h2>
+            <div class="progress-container retro-border">
+                <div id="progress-list" class="progress-list">
+                    <!-- Progress items will be added dynamically -->
+                </div>
+                <div class="progress-stats">
+                    <p>Systems Repaired: <span id="systems-repaired">0</span>/8</p>
+                    <p>Time Elapsed: <span id="time-elapsed">00:00</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Help Section -->
+    <section id="help" class="help-section" style="display: none;">
+        <div class="container">
+            <div class="help-container retro-border">
+                <h2 class="section-title retro-text glitch-text" data-text="EMERGENCY HELP">EMERGENCY HELP</h2>
+                <div class="help-content">
+                    <div class="help-category">
+                        <h3>🎮 Game Controls</h3>
+                        <ul>
+                            <li><kbd>ESC</kbd> - Open Panic Menu (chaos management)</li>
+                            <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> - Quick Calm</li>
+                            <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> - Emergency Reset</li>
+                            <li>Click outside modals to close them</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>🧩 Puzzle Solutions</h3>
+                        <p>Stuck? Each puzzle has a unique solution:</p>
+                        <ul>
+                            <li><strong>Sentient Terminal:</strong> Be nice to it</li>
+                            <li><strong>Paranoid Password:</strong> It thinks you're a spy</li>
+                            <li><strong>Time Clock:</strong> Synchronize all times</li>
+                            <li><strong>Drunk Nav:</strong> Find the sobriety test</li>
+                            <li><strong>Conspiracy Search:</strong> Search for "the truth"</li>
+                            <li><strong>Existential Error:</strong> Give it purpose</li>
+                            <li><strong>Mime Modal:</strong> Use gestures to communicate</li>
+                            <li><strong>Iframe Maze:</strong> Follow the correct portal sequence</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>💻 Terminal Commands</h3>
+                        <p>Access the terminal for advanced control:</p>
+                        <ul>
+                            <li><code>help</code> - Show all commands</li>
+                            <li><code>status</code> - Check system health</li>
+                            <li><code>puzzle [id]</code> - Launch specific puzzle</li>
+                            <li><code>hint [id]</code> - Get detailed hints</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="help-category">
+                        <h3>🎯 Objective</h3>
+                        <p>Solve all 8 puzzles to stabilize the system. Each solved puzzle reduces chaos. Too much chaos makes the site harder to navigate!</p>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="closeHelp()">Close Help</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p class="glitch-text" data-text="© 2025 CRT CHAOS - SYSTEM UNSTABLE">© 2025 CRT CHAOS - SYSTEM UNSTABLE</p>
+                <p>Press ESC to P̸̱̈Ä̵́ͅN̶̰̈́I̷̱̿C̸̱̾</p>
+                <p class="footer-credit">Built with a gun to my head by VonHoltenCodes 2025</p>
+                <p><a href="https://github.com/VonHoltenCodes" target="_blank" class="github-link">
+                    <svg height="20" width="20" viewBox="0 0 16 16" version="1.1" style="vertical-align: middle; margin-right: 5px;">
+                        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                    </svg>
+                    VonHoltenCodes
+                </a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chaos Meter -->
+    <div class="chaos-meter" id="chaos-meter">
+        <div>Chaos Level</div>
+        <div class="chaos-meter-bar">
+            <div class="chaos-meter-fill" id="chaos-meter-fill" style="width: 70%"></div>
+        </div>
+    </div>
+
+    <!-- Hidden puzzle containers will be added dynamically -->
+    <div id="puzzle-modals"></div>
+
+    <!-- JavaScript Files -->
+    <script src="js/chaos-core.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/back-to-top.js"></script>
+    
+    <!-- Puzzle Scripts -->
+    <script src="js/puzzles/sentient-terminal.js"></script>
+    <script src="js/puzzles/paranoid-password.js"></script>
+    <script src="js/puzzles/time-clock.js"></script>
+    <script src="js/puzzles/drunk-nav.js"></script>
+    <script src="js/puzzles/conspiracy-search.js"></script>
+    <script src="js/puzzles/existential-error.js"></script>
+    <script src="js/puzzles/mime-modal.js"></script>
+    <script src="js/puzzles/iframe-maze.js"></script>
+
+    <script>
+        // Mobile detection
+        if (window.innerWidth < 768) {
+            document.getElementById('mobile-warning').style.display = 'flex';
+        }
+        
+        // Start timer
+        const startTime = Date.now();
+        setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            const timeElement = document.getElementById('time-elapsed');
+            if (timeElement) {
+                timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+
+        function proceedAnyway() {
+            document.getElementById('mobile-warning').style.display = 'none';
+        }
+
+        // Terminal functionality
+        function showTerminal() {
+            document.getElementById('terminal').style.display = 'block';
+            document.getElementById('terminal-input').focus();
+            // Scroll to terminal
+            document.getElementById('terminal').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Help functionality
+        function showHelp() {
+            document.getElementById('help').style.display = 'block';
+            document.getElementById('help').scrollIntoView({ behavior: 'smooth' });
+            // Hide after delay
+            setTimeout(() => {
+                window.chaos.showNotification('Press Close or scroll away to hide help', 'system');
+            }, 1000);
+        }
+        
+        function closeHelp() {
+            document.getElementById('help').style.display = 'none';
+        }
+        
+        // Navigation click handlers
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle navigation clicks
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = link.getAttribute('href');
+                    
+                    if (target === '#terminal') {
+                        showTerminal();
+                    } else if (target === '#help') {
+                        showHelp();
+                    } else if (target) {
+                        // For other sections, just scroll
+                        const element = document.querySelector(target);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+        });
+
+        function initializeDiagnostics() {
+            window.chaos.showNotification('RUNNING SYSTEM DIAGNOSTICS...', 'system');
+            
+            // Show diagnostic results after a delay
+            setTimeout(() => {
+                const unsolved = puzzles.filter(p => !window.chaos.solvedPuzzles.has(p.id));
+                const report = `
+DIAGNOSTIC REPORT:
+==================
+CHAOS LEVEL: ${window.chaos.chaosLevel}/10
+SYSTEMS ONLINE: ${window.chaos.activePuzzles.size}
+SYSTEMS REPAIRED: ${window.chaos.solvedPuzzles.size}/${puzzles.length}
+CRITICAL FAILURES: ${unsolved.length}
+
+FAILED SYSTEMS:
+${unsolved.map(p => `- ${p.name}: ${p.description}`).join('\n')}
+
+RECOMMENDATION: Access failed systems to restore stability.`;
+                
+                alert(report);
+                
+                if (unsolved.length > 5) {
+                    window.chaos.showNotification('WARNING: Multiple system failures detected!', 'error');
+                    window.chaos.increaseChaos(0.5);
+                }
+            }, 1500);
+        }
+
+        // Basic terminal input handler
+        document.getElementById('terminal-input')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const input = this.value.trim();
+                const output = document.getElementById('terminal-output');
+                
+                // Add command to output
+                output.innerHTML += `<p>chaos@crt:~$ ${input}</p>`;
+                
+                // Process command
+                if (input === 'help') {
+                    output.innerHTML += `<p style="color: #00ff00">Available commands:</p>`;
+                    output.innerHTML += `<p>  list - Show all malfunctioning systems</p>`;
+                    output.innerHTML += `<p>  status - Display system status</p>`;
+                    output.innerHTML += `<p>  chaos - Check current chaos level</p>`;
+                    output.innerHTML += `<p>  puzzle [id] - Access specific system</p>`;
+                    output.innerHTML += `<p>  hint [id] - Get hint for a puzzle</p>`;
+                    output.innerHTML += `<p>  reset - Reset all progress (requires confirmation)</p>`;
+                    output.innerHTML += `<p>  clear - Clear terminal</p>`;
+                    output.innerHTML += `<p>  easter egg - ???</p>`;
+                } else if (input === 'clear') {
+                    output.innerHTML = '';
+                } else if (input === 'status') {
+                    output.innerHTML += `<p style="color: #00ff00">SYSTEM STATUS:</p>`;
+                    output.innerHTML += `<p>CHAOS LEVEL: ${window.chaos.chaosLevel}/10</p>`;
+                    output.innerHTML += `<p>SOLVED PUZZLES: ${window.chaos.solvedPuzzles.size}/${puzzles.length}</p>`;
+                    output.innerHTML += `<p>STABILITY: ${Math.round((1 - window.chaos.chaosLevel / 10) * 100)}%</p>`;
+                    const unsolved = puzzles.filter(p => !window.chaos.solvedPuzzles.has(p.id));
+                    if (unsolved.length > 0) {
+                        output.innerHTML += `<p style="color: #ff0000">FAILED SYSTEMS: ${unsolved.map(p => p.name).join(', ')}</p>`;
+                    }
+                } else if (input === 'list') {
+                    output.innerHTML += `<p style="color: #00ff00">SYSTEM MANIFEST:</p>`;
+                    puzzles.forEach(puzzle => {
+                        const solved = window.chaos.solvedPuzzles.has(puzzle.id);
+                        const status = solved ? '<span style="color: #00ff00">[ONLINE]</span>' : '<span style="color: #ff0000">[FAILED]</span>';
+                        output.innerHTML += `<p>${status} ${puzzle.id}: ${puzzle.name}</p>`;
+                    });
+                } else if (input === 'chaos') {
+                    const level = window.chaos.chaosLevel;
+                    const bar = '█'.repeat(Math.floor(level)) + '░'.repeat(10 - Math.floor(level));
+                    output.innerHTML += `<p>CHAOS LEVEL: [${bar}] ${level}/10</p>`;
+                    if (level > 7) {
+                        output.innerHTML += `<p style="color: #ff0000">WARNING: CRITICAL CHAOS LEVELS!</p>`;
+                        output.innerHTML += `<p>Press ESC for panic menu</p>`;
+                    }
+                } else if (input.startsWith('puzzle ')) {
+                    const puzzleId = input.substring(7).trim();
+                    const puzzle = puzzles.find(p => p.id === puzzleId);
+                    if (puzzle) {
+                        output.innerHTML += `<p>Accessing ${puzzle.name}...</p>`;
+                        setTimeout(() => loadPuzzle(puzzleId), 500);
+                    } else {
+                        output.innerHTML += `<p style="color: #ff0000">ERROR: Unknown system '${puzzleId}'</p>`;
+                        output.innerHTML += `<p>Use 'list' to see available systems</p>`;
+                    }
+                } else if (input.startsWith('hint ')) {
+                    const puzzleId = input.substring(5).trim();
+                    const hints = {
+                        'sentient-terminal': 'Try complimenting the terminal. Say something nice!',
+                        'paranoid-password': 'The password thinks you\'re a spy. Try: trustno1',
+                        'time-clock': 'Sync all clocks to the same time to stabilize the temporal field',
+                        'drunk-nav': 'Look for the "Sobriety Test" option',
+                        'conspiracy-search': 'Search for "the truth" to blow its mind',
+                        'existential-error': 'Reassure it about its purpose. Say "you have purpose"',
+                        'mime-modal': 'Wave → Door → Unlock → Celebrate',
+                        'iframe-maze': 'The path is: Alpha → Gamma → Beta → Delta → Omega'
+                    };
+                    if (hints[puzzleId]) {
+                        output.innerHTML += `<p style="color: #ffff00">HINT: ${hints[puzzleId]}</p>`;
+                    } else {
+                        output.innerHTML += `<p style="color: #ff0000">No hint available for '${puzzleId}'</p>`;
+                    }
+                } else if (input === 'reset') {
+                    output.innerHTML += `<p style="color: #ff0000">WARNING: This will reset all progress!</p>`;
+                    output.innerHTML += `<p>Type 'reset confirm' to proceed</p>`;
+                } else if (input === 'reset confirm') {
+                    output.innerHTML += `<p>Resetting all systems...</p>`;
+                    setTimeout(() => {
+                        window.chaos.resetProgress();
+                    }, 1000);
+                } else if (input === 'easter egg') {
+                    output.innerHTML += `<p style="color: #ff00ff">🥚 You found it! Here's a secret...</p>`;
+                    output.innerHTML += `<p>Try the Konami code: ↑ ↑ ↓ ↓ ← → ← → B A</p>`;
+                } else if (input === '') {
+                    // Just show prompt again
+                } else {
+                    output.innerHTML += `<p style="color: #ff0000">Command not found: ${input}</p>`;
+                    output.innerHTML += `<p>Type 'help' for available commands</p>`;
+                }
+                
+                // Clear input and scroll to bottom
+                this.value = '';
+                output.scrollTop = output.scrollHeight;
+            }
+        });
+
+        // Update chaos meter and progress
+        setInterval(() => {
+            if (window.chaos) {
+                const fillPercent = (window.chaos.chaosLevel / 10) * 100;
+                const fillElement = document.getElementById('chaos-meter-fill');
+                const levelElement = document.getElementById('chaos-level');
+                const repairedElement = document.getElementById('systems-repaired');
+                const stabilityElement = document.getElementById('stability-percent');
+                
+                if (fillElement) {
+                    fillElement.style.width = fillPercent + '%';
+                }
+                
+                if (levelElement) {
+                    levelElement.textContent = 
+                        window.chaos.chaosLevel > 7 ? 'CRITICAL' : 
+                        window.chaos.chaosLevel > 4 ? 'WARNING' : 'UNSTABLE';
+                }
+                
+                if (repairedElement) {
+                    repairedElement.textContent = window.chaos.solvedPuzzles.size;
+                }
+                
+                if (stabilityElement) {
+                    const stability = Math.round((1 - window.chaos.chaosLevel / 10) * 85 + 15);
+                    stabilityElement.textContent = stability + '%';
+                }
+                
+                // Update progress list
+                updateProgressList();
+                
+                // Also update puzzle card status indicators
+                updatePuzzleCardStatuses();
+            }
+        }, 1000);
+        
+        // Function to update puzzle card status indicators
+        function updatePuzzleCardStatuses() {
+            if (!window.chaos) return;
+            
+            puzzles.forEach(puzzle => {
+                const statusElement = document.getElementById(`status-${puzzle.id}`);
+                if (statusElement) {
+                    const isSolved = window.chaos.solvedPuzzles.has(puzzle.id);
+                    if (isSolved && statusElement.classList.contains('unsolved')) {
+                        statusElement.classList.remove('unsolved');
+                        statusElement.classList.add('solved');
+                    } else if (!isSolved && statusElement.classList.contains('solved')) {
+                        statusElement.classList.remove('solved');
+                        statusElement.classList.add('unsolved');
+                    }
+                }
+            });
+        }
+        
+        // Function to update progress list
+        function updateProgressList() {
+            const progressList = document.getElementById('progress-list');
+            if (!progressList || !window.chaos) return;
+            
+            // Clear and rebuild the list
+            progressList.innerHTML = '';
+            
+            puzzles.forEach(puzzle => {
+                const item = document.createElement('div');
+                item.className = 'progress-item';
+                const isSolved = window.chaos.solvedPuzzles.has(puzzle.id);
+                item.innerHTML = `
+                    <span class="progress-indicator ${isSolved ? 'solved' : 'unsolved'}">
+                        ${isSolved ? '✓' : '✗'}
+                    </span>
+                    <span class="progress-name">${puzzle.name}</span>
+                `;
+                progressList.appendChild(item);
+            });
+        }
+
+        // Puzzle data (to be populated)
+        const puzzles = [
+            {
+                id: 'sentient-terminal',
+                name: 'Sentient Terminal',
+                description: 'Terminal refuses commands. Mood: HOSTILE',
+                difficulty: 'Medium',
+                icon: '>_'
+            },
+            {
+                id: 'paranoid-password',
+                name: 'Paranoid Password',
+                description: 'Login system suspects everyone',
+                difficulty: 'Easy',
+                icon: '🔐'
+            },
+            {
+                id: 'time-clock',
+                name: 'Time-Traveling Clock',
+                description: 'Temporal anomaly detected',
+                difficulty: 'Hard',
+                icon: '⏰'
+            },
+            {
+                id: 'drunk-nav',
+                name: 'Drunk Navigation',
+                description: 'Menu items are intoxicated',
+                difficulty: 'Easy',
+                icon: '🍺'
+            },
+            {
+                id: 'conspiracy-search',
+                name: 'Conspiracy Search',
+                description: 'Search engine knows too much',
+                difficulty: 'Medium',
+                icon: '👁️'
+            },
+            {
+                id: 'existential-error',
+                name: 'Existential Error',
+                description: '404 having identity crisis',
+                difficulty: 'Medium',
+                icon: '❓'
+            },
+            {
+                id: 'mime-modal',
+                name: 'Mime Modal',
+                description: 'Silent but expressive popup',
+                difficulty: 'Hard',
+                icon: '🎭'
+            },
+            {
+                id: 'iframe-maze',
+                name: 'Recursive Iframe',
+                description: 'Infinite nested reality',
+                difficulty: 'Hard',
+                icon: '♾️'
+            }
+        ];
+
+        // Populate puzzle grid
+        const puzzleGrid = document.getElementById('puzzle-grid');
+        puzzles.forEach(puzzle => {
+            const card = document.createElement('div');
+            card.className = 'service-card retro-border puzzle-card';
+            card.innerHTML = `
+                <h3>${puzzle.name} <span class="puzzle-status unsolved" id="status-${puzzle.id}"></span></h3>
+                <p class="service-price">Difficulty: ${puzzle.difficulty}</p>
+                <p>${puzzle.description}</p>
+                <button class="btn btn-small" onclick="loadPuzzle('${puzzle.id}')">ACCESS SYSTEM</button>
+            `;
+            puzzleGrid.appendChild(card);
+        });
+
+        function loadPuzzle(puzzleId) {
+            console.log('loadPuzzle function in index.html called with:', puzzleId);
+            window.chaos.showNotification(`Loading ${puzzleId}...`);
+            
+            // Direct activation based on puzzle ID
+            switch(puzzleId) {
+                case 'sentient-terminal':
+                    if (window.sentientTerminal) {
+                        window.sentientTerminal.activate();
+                    } else {
+                        console.error('Sentient terminal not loaded');
+                    }
+                    break;
+                case 'paranoid-password':
+                    if (window.paranoidPassword) {
+                        window.paranoidPassword.activate();
+                    } else {
+                        console.error('Paranoid password not loaded');
+                    }
+                    break;
+                case 'time-clock':
+                    if (window.timeClock) {
+                        window.timeClock.activate();
+                    } else {
+                        console.error('Time clock not loaded');
+                    }
+                    break;
+                case 'drunk-nav':
+                    if (window.drunkNav) {
+                        window.drunkNav.activate();
+                    } else {
+                        console.error('Drunk navigation not loaded');
+                    }
+                    break;
+                case 'conspiracy-search':
+                    if (window.conspiracySearch) {
+                        window.conspiracySearch.activate();
+                    } else {
+                        console.error('Conspiracy search not loaded');
+                    }
+                    break;
+                case 'existential-error':
+                    if (window.existentialError) {
+                        window.existentialError.activate();
+                    } else {
+                        console.error('Existential error not loaded');
+                    }
+                    break;
+                case 'mime-modal':
+                    if (window.mimeModal) {
+                        window.mimeModal.activate();
+                    } else {
+                        console.error('Mime modal not loaded');
+                    }
+                    break;
+                case 'iframe-maze':
+                    if (window.iframeMaze) {
+                        window.iframeMaze.activate();
+                    } else {
+                        console.error('Iframe maze not loaded');
+                    }
+                    break;
+                default:
+                    console.log('Puzzle not implemented:', puzzleId);
+            }
+        }
+    </script>
+
+    <style>
+        /* Additional CRT Chaos specific styles */
+        .hero {
+            padding: 40px 0 30px 0;
+            text-align: center;
+        }
+        
+        .hero-content {
+            text-align: center;
+        }
+        
+        .ascii-logo {
+            font-family: monospace;
+            font-size: 10px;
+            line-height: 1.2;
+            color: var(--neon-green);
+            margin: 0 auto 20px auto;
+            display: inline-block;
+            text-align: center;
+            animation: flicker 4s infinite;
+            text-shadow: 
+                0 0 5px var(--neon-green),
+                0 0 10px var(--neon-green);
+        }
+        
+        @media (max-width: 768px) {
+            .ascii-logo {
+                font-size: 6px;
+            }
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            95% { opacity: 0.9; }
+        }
+        
+        .hero-title {
+            font-size: 28px;
+            margin: 20px 0;
+            line-height: 1.2;
+        }
+        
+        .hero-title .glitch-text {
+            display: block;
+        }
+        
+        .system-status-inline {
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            text-align: center;
+            color: var(--neon-green);
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            white-space: nowrap;
+        }
+        
+        .status-divider {
+            color: #666;
+        }
+        
+        .status-value {
+            color: #ff0000;
+            font-weight: bold;
+            animation: glitch-skew 0.5s infinite;
+        }
+        
+        .hero-buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .terminal-section {
+            padding: 3rem 0;
+        }
+
+        .main-terminal {
+            min-height: 400px;
+        }
+
+        .terminal-body {
+            height: 350px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .terminal-output {
+            margin-bottom: 20px;
+        }
+
+        .terminal-output p {
+            margin: 5px 0;
+            color: var(--neon-green);
+        }
+
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .prompt {
+            color: var(--neon-yellow);
+            margin-right: 10px;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: var(--neon-green);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+        }
+
+        .diagnostics-container {
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .diagnostic-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .diagnostic-label {
+            color: var(--neon-green);
+        }
+
+        .diagnostic-value {
+            color: var(--neon-yellow);
+            font-family: monospace;
+        }
+
+        .puzzle-card:hover {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .progress-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-stats {
+            text-align: center;
+            margin-top: 2rem;
+            font-family: 'Courier New', monospace;
+            color: var(--neon-green);
+        }
+
+        .progress-stats span {
+            color: var(--neon-yellow);
+        }
+        
+        .progress-list {
+            margin-bottom: 20px;
+        }
+        
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 0;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+        }
+        
+        .progress-indicator {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .progress-indicator.solved {
+            color: #00ff00;
+        }
+        
+        .progress-indicator.unsolved {
+            color: #ff0000;
+        }
+        
+        .progress-name {
+            flex: 1;
+        }
+        
+        /* Help Section Styles */
+        .help-section {
+            padding: 3rem 0;
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .help-container {
+            background: #0a0a0a;
+            padding: 30px;
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+        
+        .help-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .help-category {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 5px;
+        }
+        
+        .help-category h3 {
+            color: var(--neon-green);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .help-category ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .help-category li {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .help-category li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--neon-green);
+        }
+        
+        .help-category code {
+            background: rgba(0, 255, 0, 0.2);
+            padding: 2px 6px;
+            color: var(--neon-green);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .help-category kbd {
+            background: #333;
+            border: 1px solid #666;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 12px;
+            color: #fff;
+            box-shadow: 0 2px 0 #222;
+            margin: 0 2px;
+        }
+        
+        .help-category strong {
+            color: var(--neon-yellow);
+        }
+        
+        .help-section .btn {
+            margin-top: 20px;
+        }
+        
+        /* Footer Credit Styles */
+        .footer-credit {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .github-link {
+            color: var(--neon-green);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .github-link:hover {
+            color: #fff;
+            text-shadow: 
+                0 0 5px var(--neon-green),
+                0 0 10px var(--neon-green);
+        }
+        
+        .github-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--neon-green);
+            transition: width 0.3s;
+        }
+        
+        .github-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</body>
+</html>

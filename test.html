@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRT Chaos Test</title>
+    <style>
+        body {
+            background: black;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CRT Chaos Test Page</h1>
+    <p>If you can see this, the server is working!</p>
+    <p>Server URL: http://localhost:8000</p>
+    <button onclick="alert('JavaScript is working!')">Test JS</button>
+    
+    <h2>Debug Info:</h2>
+    <div id="debug"></div>
+    
+    <script>
+        document.getElementById('debug').innerHTML = `
+            <p>Window size: ${window.innerWidth} x ${window.innerHeight}</p>
+            <p>User Agent: ${navigator.userAgent}</p>
+            <p>Current time: ${new Date()}</p>
+        `;
+    </script>
+</body>
+</html>

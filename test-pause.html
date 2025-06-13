@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pause Button Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #000;
+            color: #0f0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+        .paused {
+            border-color: #f00;
+            color: #f00;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Time Clock Pause Test</h1>
+    
+    <div class="status">
+        <p>Unix Speed: <span id="unix-speed">1</span></p>
+        <p>Binary Speed: <span id="binary-speed">1</span></p>
+        <p>Hex Speed: <span id="hex-speed">1</span></p>
+        <p>Roman Speed: <span id="roman-speed">1</span></p>
+        <p>Mayan Speed: <span id="mayan-speed">1</span></p>
+    </div>
+    
+    <div>
+        <button onclick="testPause('unix')">Toggle Unix Pause</button>
+        <button onclick="testPause('binary')">Toggle Binary Pause</button>
+        <button onclick="testPause('hex')">Toggle Hex Pause</button>
+        <button onclick="testPause('roman')">Toggle Roman Pause</button>
+        <button onclick="testPause('mayan')">Toggle Mayan Pause</button>
+    </div>
+    
+    <div>
+        <button onclick="testAllPause()">Toggle All Pause</button>
+        <button onclick="checkState()">Check State</button>
+    </div>
+    
+    <div id="log" style="margin-top: 20px; border: 1px solid #0f0; padding: 10px; height: 300px; overflow-y: auto;">
+        <p>Test log:</p>
+    </div>
+    
+    <script>
+        // Simple test implementation to verify the pause logic
+        const timeStreams = {
+            unix: { offset: 0, speed: 1 },
+            binary: { offset: 0, speed: 1 },
+            hex: { offset: 0, speed: 1 },
+            roman: { offset: 0, speed: 1 },
+            mayan: { offset: 0, speed: 1 }
+        };
+        
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            const p = document.createElement('p');
+            p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logDiv.appendChild(p);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function updateDisplay() {
+            Object.keys(timeStreams).forEach(stream => {
+                document.getElementById(`${stream}-speed`).textContent = timeStreams[stream].speed;
+            });
+        }
+        
+        function testPause(stream) {
+            log(`Testing pause for ${stream}`);
+            const current = timeStreams[stream].speed;
+            log(`Current speed: ${current}`);
+            
+            timeStreams[stream].speed = current === 0 ? 1 : 0;
+            log(`New speed: ${timeStreams[stream].speed}`);
+            
+            updateDisplay();
+            
+            // Test the actual puzzle function
+            if (window.timeClock) {
+                log(`Calling actual toggleSpeed for ${stream}`);
+                window.timeClock.toggleSpeed(stream);
+            } else {
+                log('Time clock not loaded');
+            }
+        }
+        
+        function testAllPause() {
+            Object.keys(timeStreams).forEach(stream => {
+                testPause(stream);
+            });
+        }
+        
+        function checkState() {
+            log('=== Current State ===');
+            Object.keys(timeStreams).forEach(stream => {
+                log(`${stream}: speed=${timeStreams[stream].speed}, offset=${timeStreams[stream].offset}`);
+                if (window.timeClock) {
+                    log(`  Actual: speed=${window.timeClock.timeStreams[stream].speed}`);
+                }
+            });
+        }
+        
+        // Load the time clock script
+        const script = document.createElement('script');
+        script.src = 'js/puzzles/time-clock.js';
+        script.onload = () => {
+            log('Time clock script loaded');
+            setTimeout(() => {
+                if (window.timeClock) {
+                    log('Time clock initialized');
+                } else {
+                    log('Time clock NOT initialized');
+                }
+            }, 1000);
+        };
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Status System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/crt.css">
+    <link rel="stylesheet" href="css/chaos-engine.css">
+</head>
+<body>
+    <div style="padding: 50px;">
+        <h1>Status System Test</h1>
+        
+        <h2>Registered Puzzles:</h2>
+        <div id="registered-puzzles"></div>
+        
+        <h2>Test Actions:</h2>
+        <button onclick="testSolvePuzzle('sentient-terminal')">Solve Sentient Terminal</button>
+        <button onclick="testSolvePuzzle('paranoid-password')">Solve Paranoid Password</button>
+        <button onclick="testSolvePuzzle('time-clock')">Solve Time Clock</button>
+        <button onclick="testSolvePuzzle('drunk-nav')">Solve Drunk Nav</button>
+        <button onclick="testSolvePuzzle('conspiracy-search')">Solve Conspiracy Search</button>
+        <button onclick="testSolvePuzzle('existential-error')">Solve Existential Error</button>
+        <button onclick="testSolvePuzzle('mime-modal')">Solve Mime Modal</button>
+        <button onclick="testSolvePuzzle('iframe-maze')">Solve Iframe Maze</button>
+        
+        <h2>Current Status:</h2>
+        <div id="current-status"></div>
+    </div>
+    
+    <script src="js/chaos-core.js"></script>
+    <script src="js/puzzles/sentient-terminal.js"></script>
+    <script src="js/puzzles/paranoid-password.js"></script>
+    <script src="js/puzzles/time-clock.js"></script>
+    <script src="js/puzzles/drunk-nav.js"></script>
+    <script src="js/puzzles/conspiracy-search.js"></script>
+    <script src="js/puzzles/existential-error.js"></script>
+    <script src="js/puzzles/mime-modal.js"></script>
+    <script src="js/puzzles/iframe-maze.js"></script>
+    
+    <script>
+        function updateStatus() {
+            const registered = document.getElementById('registered-puzzles');
+            const status = document.getElementById('current-status');
+            
+            if (window.chaos) {
+                registered.innerHTML = `<p>Active Puzzles: ${window.chaos.activePuzzles.size}</p>`;
+                registered.innerHTML += '<ul>';
+                window.chaos.activePuzzles.forEach((puzzle, id) => {
+                    registered.innerHTML += `<li>${id}</li>`;
+                });
+                registered.innerHTML += '</ul>';
+                
+                status.innerHTML = `
+                    <p>Solved Puzzles: ${window.chaos.solvedPuzzles.size} / ${window.chaos.activePuzzles.size}</p>
+                    <p>Chaos Level: ${window.chaos.chaosLevel}</p>
+                    <p>Solved: ${Array.from(window.chaos.solvedPuzzles).join(', ') || 'None'}</p>
+                `;
+            }
+        }
+        
+        function testSolvePuzzle(puzzleId) {
+            console.log('Testing solve for:', puzzleId);
+            window.chaos.puzzleSolved(puzzleId);
+            updateStatus();
+        }
+        
+        // Update status every second
+        setInterval(updateStatus, 1000);
+        
+        // Initial update after everything loads
+        setTimeout(updateStatus, 1000);
+    </script>
+</body>
+</html>
