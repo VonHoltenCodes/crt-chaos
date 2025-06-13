@@ -53,7 +53,7 @@ class ConspiracySearch {
     }
     
     createSearchModal() {
-        console.log('Creating conspiracy search modal...');
+        safeConsole.log('Creating conspiracy search modal...');
         
         if (document.getElementById('conspiracy-search-modal')) {
             return;
@@ -159,7 +159,7 @@ class ConspiracySearch {
     }
     
     activate() {
-        console.log('Conspiracy Search activate() called');
+        safeConsole.log('Conspiracy Search activate() called');
         
         if (!document.getElementById('conspiracy-search-modal')) {
             this.createSearchModal();
@@ -570,19 +570,19 @@ class ConspiracySearch {
 
 // Initialize
 window.addEventListener('load', () => {
-    console.log('Initializing Conspiracy Search...');
+    safeConsole.log('Initializing Conspiracy Search...');
     window.conspiracySearch = new ConspiracySearch();
-    console.log('Conspiracy Search instance created:', window.conspiracySearch);
+    safeConsole.log('Conspiracy Search instance created:', window.conspiracySearch);
     
     if (window.chaos) {
         window.chaos.registerPuzzle('conspiracy-search', window.conspiracySearch);
-        console.log('Conspiracy Search registered with chaos engine');
+        safeConsole.log('Conspiracy Search registered with chaos engine');
     } else {
-        console.log('Chaos engine not ready, waiting...');
+        safeConsole.log('Chaos engine not ready, waiting...');
         setTimeout(() => {
             if (window.chaos) {
                 window.chaos.registerPuzzle('conspiracy-search', window.conspiracySearch);
-                console.log('Conspiracy Search registered with chaos engine (delayed)');
+                safeConsole.log('Conspiracy Search registered with chaos engine (delayed)');
             }
         }, 500);
     }

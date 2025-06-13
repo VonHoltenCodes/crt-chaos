@@ -3,6 +3,16 @@
  * Controls all glitches, themes, and puzzle management
  */
 
+// Debug mode - set to false for production
+const DEBUG_MODE = false;
+
+// Safe console wrapper
+const safeConsole = {
+    log: (...args) => DEBUG_MODE && console.log(...args),
+    error: (...args) => console.error(...args), // Always show errors
+    warn: (...args) => DEBUG_MODE && console.warn(...args)
+};
+
 class ChaosEngine {
     constructor() {
         this.chaosLevel = 1; // 0-10 scale
@@ -27,7 +37,7 @@ class ChaosEngine {
     }
     
     init() {
-        console.log('ChaosEngine init() called');
+        safeConsole.log('ChaosEngine init() called');
         
         try {
             this.loadProgress();
@@ -35,8 +45,8 @@ class ChaosEngine {
             this.startChaos();
             this.initializeAudio();
             
-            console.log('%c CRT CHAOS INITIALIZED ', 'background: #00ff00; color: #000; font-size: 20px;');
-            console.log('%c Chaos Level: ' + this.chaosLevel, 'color: #00ff00;');
+            safeConsole.log('%c CRT CHAOS INITIALIZED ', 'background: #00ff00; color: #000; font-size: 20px;');
+            safeConsole.log('%c Chaos Level: ' + this.chaosLevel, 'color: #00ff00;');
         } catch (error) {
             console.error('ChaosEngine initialization error:', error);
         }
@@ -219,7 +229,7 @@ class ChaosEngine {
     // Puzzle Management
     registerPuzzle(puzzleId, puzzleInstance) {
         this.activePuzzles.set(puzzleId, puzzleInstance);
-        console.log(`%c Puzzle Registered: ${puzzleId}`, 'color: #00ff00;');
+        safeConsole.log(`%c Puzzle Registered: ${puzzleId}`, 'color: #00ff00;');
     }
     
     puzzleSolved(puzzleId) {
@@ -239,12 +249,12 @@ class ChaosEngine {
             this.victory();
         }
         
-        console.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #00ff00;');
+        safeConsole.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #00ff00;');
     }
     
     increaseChaos(amount = 0.5) {
         this.chaosLevel = Math.min(this.maxChaos, this.chaosLevel + amount);
-        console.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #ff0000;');
+        safeConsole.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #ff0000;');
     }
     
     // Progress Management
@@ -295,7 +305,7 @@ class ChaosEngine {
     // Audio
     initializeAudio() {
         // Skip audio preloading for now since we don't have sound files yet
-        console.log('Audio initialization skipped (no sound files yet)');
+        safeConsole.log('Audio initialization skipped (no sound files yet)');
     }
     
     playSound(soundName) {
@@ -362,7 +372,7 @@ class ChaosEngine {
     }
     
     enableDevMode() {
-        console.log('%c DEV MODE ACTIVATED ', 'background: #ff00ff; color: #000; font-size: 20px;');
+        safeConsole.log('%c DEV MODE ACTIVATED ', 'background: #ff00ff; color: #000; font-size: 20px;');
         this.showNotification('DEV MODE ACTIVATED');
         window.chaosEngine = this; // Expose to console
     }
@@ -438,7 +448,7 @@ class ChaosEngine {
         document.body.style.transform = '';
         document.body.style.opacity = '1';
         
-        console.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #00ff00;');
+        safeConsole.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #00ff00;');
     }
     
     stopAllGlitches() {
@@ -521,10 +531,10 @@ class ChaosEngine {
 
 // Initialize chaos when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing ChaosEngine...');
+    safeConsole.log('DOM loaded, initializing ChaosEngine...');
     try {
         window.chaos = new ChaosEngine();
-        console.log('ChaosEngine created successfully');
+        safeConsole.log('ChaosEngine created successfully');
     } catch (error) {
         console.error('Failed to create ChaosEngine:', error);
     }

@@ -37,7 +37,7 @@ class IframeMaze {
     }
     
     createMazeModal() {
-        console.log('Creating iframe maze modal...');
+        safeConsole.log('Creating iframe maze modal...');
         
         if (document.getElementById('iframe-maze-modal')) {
             return;
@@ -125,7 +125,7 @@ class IframeMaze {
     }
     
     activate() {
-        console.log('Iframe Maze activate() called');
+        safeConsole.log('Iframe Maze activate() called');
         
         if (!document.getElementById('iframe-maze-modal')) {
             this.createMazeModal();
@@ -427,12 +427,12 @@ class IframeMaze {
 
 // Initialize
 window.addEventListener('load', () => {
-    console.log('Initializing Iframe Maze...');
+    safeConsole.log('Initializing Iframe Maze...');
     window.iframeMaze = new IframeMaze();
     
     if (window.chaos) {
         window.chaos.registerPuzzle('iframe-maze', window.iframeMaze);
-        console.log('Iframe Maze registered');
+        safeConsole.log('Iframe Maze registered');
     } else {
         setTimeout(() => {
             if (window.chaos) {

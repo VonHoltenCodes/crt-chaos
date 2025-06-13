@@ -38,7 +38,7 @@ class DrunkNavigation {
     }
     
     createDrunkModal() {
-        console.log('Creating drunk navigation modal...');
+        safeConsole.log('Creating drunk navigation modal...');
         
         if (document.getElementById('drunk-nav-modal')) {
             return;
@@ -112,7 +112,7 @@ class DrunkNavigation {
     }
     
     activate() {
-        console.log('Drunk Navigation activate() called');
+        safeConsole.log('Drunk Navigation activate() called');
         
         if (!document.getElementById('drunk-nav-modal')) {
             this.createDrunkModal();
@@ -438,19 +438,19 @@ class DrunkNavigation {
 
 // Initialize
 window.addEventListener('load', () => {
-    console.log('Initializing Drunk Navigation...');
+    safeConsole.log('Initializing Drunk Navigation...');
     window.drunkNav = new DrunkNavigation();
-    console.log('Drunk Navigation instance created:', window.drunkNav);
+    safeConsole.log('Drunk Navigation instance created:', window.drunkNav);
     
     if (window.chaos) {
         window.chaos.registerPuzzle('drunk-nav', window.drunkNav);
-        console.log('Drunk Navigation registered with chaos engine');
+        safeConsole.log('Drunk Navigation registered with chaos engine');
     } else {
-        console.log('Chaos engine not ready for drunk nav, waiting...');
+        safeConsole.log('Chaos engine not ready for drunk nav, waiting...');
         setTimeout(() => {
             if (window.chaos) {
                 window.chaos.registerPuzzle('drunk-nav', window.drunkNav);
-                console.log('Drunk Navigation registered with chaos engine (delayed)');
+                safeConsole.log('Drunk Navigation registered with chaos engine (delayed)');
             }
         }, 500);
     }

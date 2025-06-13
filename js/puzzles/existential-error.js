@@ -77,7 +77,7 @@ class ExistentialError {
     }
     
     createErrorModal() {
-        console.log('Creating existential error modal...');
+        safeConsole.log('Creating existential error modal...');
         
         if (document.getElementById('existential-error-modal')) {
             return;
@@ -167,7 +167,7 @@ class ExistentialError {
     }
     
     activate() {
-        console.log('Existential Error activate() called');
+        safeConsole.log('Existential Error activate() called');
         
         if (!document.getElementById('existential-error-modal')) {
             this.createErrorModal();
@@ -458,12 +458,12 @@ class ExistentialError {
 
 // Initialize
 window.addEventListener('load', () => {
-    console.log('Initializing Existential Error...');
+    safeConsole.log('Initializing Existential Error...');
     window.existentialError = new ExistentialError();
     
     if (window.chaos) {
         window.chaos.registerPuzzle('existential-error', window.existentialError);
-        console.log('Existential Error registered');
+        safeConsole.log('Existential Error registered');
     } else {
         setTimeout(() => {
             if (window.chaos) {

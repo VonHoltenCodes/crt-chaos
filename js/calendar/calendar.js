@@ -25,7 +25,7 @@ class AppointmentCalendar {
         // Load calendar data from localStorage or use defaults
         this.calendarData = this.loadCalendarData();
         
-        console.log('Calendar initialized:', this.calendarData);
+        safeConsole.log('Calendar initialized:', this.calendarData);
     }
     
     /**
@@ -78,7 +78,7 @@ class AppointmentCalendar {
      */
     saveCalendarData() {
         localStorage.setItem('neonpulseCalendar', JSON.stringify(this.calendarData));
-        console.log('Calendar data saved:', this.calendarData);
+        safeConsole.log('Calendar data saved:', this.calendarData);
     }
     
     /**

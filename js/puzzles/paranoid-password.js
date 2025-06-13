@@ -48,10 +48,10 @@ class ParanoidPassword {
     }
     
     createPasswordModal() {
-        console.log('Creating paranoid password modal...');
+        safeConsole.log('Creating paranoid password modal...');
         
         if (document.getElementById('paranoid-password-modal')) {
-            console.log('Modal already exists');
+            safeConsole.log('Modal already exists');
             return;
         }
         
@@ -127,7 +127,7 @@ class ParanoidPassword {
         `;
         
         document.body.appendChild(modal);
-        console.log('Paranoid password modal appended to body');
+        safeConsole.log('Paranoid password modal appended to body');
         
         // Add click outside to close
         modal.addEventListener('click', (e) => {
@@ -140,7 +140,7 @@ class ParanoidPassword {
     }
     
     activate() {
-        console.log('Paranoid Password activate() called');
+        safeConsole.log('Paranoid Password activate() called');
         
         if (!document.getElementById('paranoid-password-modal')) {
             this.createPasswordModal();
@@ -305,7 +305,7 @@ class ParanoidPassword {
         // Give hint after 5 attempts
         if (this.attempts > 5 && !this.hintRevealed) {
             document.getElementById('password-hint').style.display = 'block';
-            console.log('%c PARANOID SYSTEM: Maybe the password is simpler than you think... like "friend123"', 'color: #00ff00; background: #000;');
+            safeConsole.log('%c PARANOID SYSTEM: Maybe the password is simpler than you think... like "friend123"', 'color: #00ff00; background: #000;');
             this.hintRevealed = true;
         }
         
@@ -417,17 +417,17 @@ class ParanoidPassword {
 
 // Initialize when window loads
 window.addEventListener('load', () => {
-    console.log('Window loaded, initializing Paranoid Password...');
+    safeConsole.log('Window loaded, initializing Paranoid Password...');
     window.paranoidPassword = new ParanoidPassword();
     
     if (window.chaos) {
         window.chaos.registerPuzzle('paranoid-password', window.paranoidPassword);
-        console.log('Paranoid Password registered');
+        safeConsole.log('Paranoid Password registered');
     } else {
         setTimeout(() => {
             if (window.chaos) {
                 window.chaos.registerPuzzle('paranoid-password', window.paranoidPassword);
-                console.log('Paranoid Password registered (delayed)');
+                safeConsole.log('Paranoid Password registered (delayed)');
             }
         }, 500);
     }

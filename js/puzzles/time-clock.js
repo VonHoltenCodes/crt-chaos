@@ -30,7 +30,7 @@ class TimeTravelingClock {
     }
     
     createClockModal() {
-        console.log('Creating time-traveling clock modal...');
+        safeConsole.log('Creating time-traveling clock modal...');
         
         if (document.getElementById('time-clock-modal')) {
             return;
@@ -157,7 +157,7 @@ class TimeTravelingClock {
     }
     
     activate() {
-        console.log('Time Clock activate() called');
+        safeConsole.log('Time Clock activate() called');
         
         if (!document.getElementById('time-clock-modal')) {
             this.createClockModal();
@@ -191,7 +191,7 @@ class TimeTravelingClock {
             const glitchChance = variance > 10000 ? 0.7 : variance > 5000 ? 0.5 : 0.3;
             
             if (Math.random() < glitchChance) {
-                console.log('TEMPORAL GLITCH TRIGGERED!');
+                safeConsole.log('TEMPORAL GLITCH TRIGGERED!');
                 this.temporalGlitch();
             }
         }, 2000); // More frequent checks
@@ -418,7 +418,7 @@ class TimeTravelingClock {
     }
     
     toggleSpeed(stream) {
-        console.log(`toggleSpeed called for ${stream}`);
+        safeConsole.log(`toggleSpeed called for ${stream}`);
         
         // Validate stream exists
         if (!this.timeStreams[stream]) {
@@ -427,23 +427,23 @@ class TimeTravelingClock {
         }
         
         const current = this.timeStreams[stream].speed;
-        console.log(`Current speed for ${stream}: ${current}`);
+        safeConsole.log(`Current speed for ${stream}: ${current}`);
         
         // Toggle the speed
         this.timeStreams[stream].speed = current === 0 ? 1 : 0;
-        console.log(`New speed for ${stream}: ${this.timeStreams[stream].speed}`);
+        safeConsole.log(`New speed for ${stream}: ${this.timeStreams[stream].speed}`);
         
         // Update visual state
         const display = document.getElementById(`${stream}-display`);
-        console.log(`Display element for ${stream}:`, display);
+        safeConsole.log(`Display element for ${stream}:`, display);
         
         if (display) {
             if (this.timeStreams[stream].speed === 0) {
                 display.classList.add('paused');
-                console.log(`Added paused class to ${stream}`);
+                safeConsole.log(`Added paused class to ${stream}`);
             } else {
                 display.classList.remove('paused');
-                console.log(`Removed paused class from ${stream}`);
+                safeConsole.log(`Removed paused class from ${stream}`);
             }
         } else {
             console.error(`Display element not found for ${stream}-display`);
@@ -453,7 +453,7 @@ class TimeTravelingClock {
         const button = document.getElementById(`pause-${stream}`);
         if (button) {
             button.textContent = this.timeStreams[stream].speed === 0 ? '▶' : '⏸';
-            console.log(`Updated button for ${stream}`);
+            safeConsole.log(`Updated button for ${stream}`);
         } else {
             console.warn(`Button not found for pause-${stream}`);
         }
@@ -631,12 +631,12 @@ class TimeTravelingClock {
 
 // Initialize
 window.addEventListener('load', () => {
-    console.log('Initializing Time-Traveling Clock...');
+    safeConsole.log('Initializing Time-Traveling Clock...');
     window.timeClock = new TimeTravelingClock();
     
     if (window.chaos) {
         window.chaos.registerPuzzle('time-clock', window.timeClock);
-        console.log('Time Clock registered');
+        safeConsole.log('Time Clock registered');
     } else {
         setTimeout(() => {
             if (window.chaos) {

@@ -69,11 +69,11 @@ class SentientTerminal {
     }
     
     createTerminalModal() {
-        console.log('Creating terminal modal...');
+        safeConsole.log('Creating terminal modal...');
         
         // Check if modal already exists
         if (document.getElementById('sentient-terminal-modal')) {
-            console.log('Modal already exists');
+            safeConsole.log('Modal already exists');
             return;
         }
         
@@ -131,7 +131,7 @@ class SentientTerminal {
         
         // Add to body instead of puzzle-modals for now
         document.body.appendChild(modal);
-        console.log('Modal appended to body');
+        safeConsole.log('Modal appended to body');
         
         // Add click outside to close
         modal.addEventListener('click', (e) => {
@@ -145,28 +145,28 @@ class SentientTerminal {
     }
     
     activate() {
-        console.log('Sentient Terminal activate() called');
-        console.log('Current modal exists?', !!document.getElementById('sentient-terminal-modal'));
+        safeConsole.log('Sentient Terminal activate() called');
+        safeConsole.log('Current modal exists?', !!document.getElementById('sentient-terminal-modal'));
         
         // Create modal if it doesn't exist
         if (!document.getElementById('sentient-terminal-modal')) {
-            console.log('Modal does not exist, creating...');
+            safeConsole.log('Modal does not exist, creating...');
             this.createTerminalModal();
         }
         
         this.isActive = true;
         const modal = document.getElementById('sentient-terminal-modal');
-        console.log('Modal after creation:', modal);
+        safeConsole.log('Modal after creation:', modal);
         
         if (!modal) {
             console.error('Sentient terminal modal not found!');
             return;
         }
         
-        console.log('Setting modal display to flex');
+        safeConsole.log('Setting modal display to flex');
         modal.style.display = 'flex';
-        console.log('Modal display style:', modal.style.display);
-        console.log('Modal computed style:', window.getComputedStyle(modal).display);
+        safeConsole.log('Modal display style:', modal.style.display);
+        safeConsole.log('Modal computed style:', window.getComputedStyle(modal).display);
         
         const input = document.getElementById('sentient-input');
         if (input) {
@@ -326,19 +326,19 @@ class SentientTerminal {
 
 // Initialize when window loads
 window.addEventListener('load', () => {
-    console.log('Window loaded, initializing Sentient Terminal...');
+    safeConsole.log('Window loaded, initializing Sentient Terminal...');
     window.sentientTerminal = new SentientTerminal();
     
     // Register with chaos engine if it exists
     if (window.chaos) {
         window.chaos.registerPuzzle('sentient-terminal', window.sentientTerminal);
-        console.log('Sentient Terminal registered');
+        safeConsole.log('Sentient Terminal registered');
     } else {
         // Try again in a moment
         setTimeout(() => {
             if (window.chaos) {
                 window.chaos.registerPuzzle('sentient-terminal', window.sentientTerminal);
-                console.log('Sentient Terminal registered (delayed)');
+                safeConsole.log('Sentient Terminal registered (delayed)');
             }
         }, 500);
     }
@@ -353,11 +353,11 @@ window.closePuzzle = function(puzzleId) {
 
 // Update loadPuzzle function
 window.loadPuzzle = function(puzzleId) {
-    console.log('loadPuzzle called with:', puzzleId);
+    safeConsole.log('loadPuzzle called with:', puzzleId);
     
     if (puzzleId === 'sentient-terminal') {
         if (window.sentientTerminal) {
-            console.log('Activating sentient terminal...');
+            safeConsole.log('Activating sentient terminal...');
             window.sentientTerminal.activate();
         } else {
             console.error('Sentient terminal not initialized!');

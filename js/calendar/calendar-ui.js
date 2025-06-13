@@ -44,7 +44,7 @@ class CalendarUI {
         // Render calendar
         this.render();
         
-        console.log('Calendar UI initialized with options:', this.options);
+        safeConsole.log('Calendar UI initialized with options:', this.options);
     }
     
     /**

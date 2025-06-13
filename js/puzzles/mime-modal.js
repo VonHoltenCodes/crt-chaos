@@ -68,7 +68,7 @@ class MimeModal {
     }
     
     createMimeModal() {
-        console.log('Creating mime modal...');
+        safeConsole.log('Creating mime modal...');
         
         if (document.getElementById('mime-modal-modal')) {
             return;
@@ -164,7 +164,7 @@ class MimeModal {
     }
     
     activate() {
-        console.log('Mime Modal activate() called');
+        safeConsole.log('Mime Modal activate() called');
         
         if (!document.getElementById('mime-modal-modal')) {
             this.createMimeModal();
@@ -449,12 +449,12 @@ class MimeModal {
 
 // Initialize
 window.addEventListener('load', () => {
-    console.log('Initializing Mime Modal...');
+    safeConsole.log('Initializing Mime Modal...');
     window.mimeModal = new MimeModal();
     
     if (window.chaos) {
         window.chaos.registerPuzzle('mime-modal', window.mimeModal);
-        console.log('Mime Modal registered');
+        safeConsole.log('Mime Modal registered');
     } else {
         setTimeout(() => {
             if (window.chaos) {

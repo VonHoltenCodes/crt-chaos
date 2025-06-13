@@ -11,7 +11,7 @@ class ContactCalendar {
      * @param {string} containerSelector - Selector for calendar container
      */
     constructor(containerSelector) {
-        console.log('ContactCalendar constructor called with:', containerSelector);
+        safeConsole.log('ContactCalendar constructor called with:', containerSelector);
         this.containerElement = document.querySelector(containerSelector);
         
         if (!this.containerElement) {
@@ -19,12 +19,12 @@ class ContactCalendar {
             return;
         }
         
-        console.log('Container element found:', this.containerElement);
+        safeConsole.log('Container element found:', this.containerElement);
         
         // Create container ID if not exists
         if (!this.containerElement.id) {
             this.containerElement.id = 'contact-calendar-' + Date.now();
-            console.log('Generated new container ID:', this.containerElement.id);
+            safeConsole.log('Generated new container ID:', this.containerElement.id);
         }
         
         // Initialize calendar
@@ -33,14 +33,14 @@ class ContactCalendar {
         // Add availability note
         this.addAvailabilityNote();
         
-        console.log('ContactCalendar initialization complete');
+        safeConsole.log('ContactCalendar initialization complete');
     }
     
     /**
      * Initialize calendar
      */
     initCalendar() {
-        console.log('initCalendar method called');
+        safeConsole.log('initCalendar method called');
         
         // Set minimum date (tomorrow)
         const tomorrow = new Date();
@@ -50,8 +50,8 @@ class ContactCalendar {
         const maxDate = new Date();
         maxDate.setDate(maxDate.getDate() + 30);
         
-        console.log('Min date:', this.formatDate(tomorrow), 'Max date:', this.formatDate(maxDate));
-        console.log('Container element ID:', this.containerElement.id);
+        safeConsole.log('Min date:', this.formatDate(tomorrow), 'Max date:', this.formatDate(maxDate));
+        safeConsole.log('Container element ID:', this.containerElement.id);
         
         try {
             // Initialize calendar UI
@@ -61,7 +61,7 @@ class ContactCalendar {
                 maxDate: this.formatDate(maxDate),
                 onDateSelected: (date) => this.showAvailability(date)
             });
-            console.log('CalendarUI initialized successfully');
+            safeConsole.log('CalendarUI initialized successfully');
         } catch (error) {
             console.error('Error initializing CalendarUI:', error);
         }
@@ -95,7 +95,7 @@ class ContactCalendar {
      * @param {string} date - Selected date in YYYY-MM-DD format
      */
     showAvailability(date) {
-        console.log('showAvailability called for date:', date);
+        safeConsole.log('showAvailability called for date:', date);
         
         try {
             // Make sure AppointmentCalendar class is available
@@ -106,16 +106,16 @@ class ContactCalendar {
             
             // Try to get the global appointment calendar or create a new one if it doesn't exist
             if (!window.appointmentCalendar) {
-                console.log('Creating new AppointmentCalendar instance');
+                safeConsole.log('Creating new AppointmentCalendar instance');
                 window.appointmentCalendar = new AppointmentCalendar();
             }
             
             const calendar = window.appointmentCalendar;
-            console.log('Using calendar instance:', calendar);
+            safeConsole.log('Using calendar instance:', calendar);
             
             // Get day of week
             const dayOfWeek = calendar.getDayOfWeek(date);
-            console.log('Day of week:', dayOfWeek);
+            safeConsole.log('Day of week:', dayOfWeek);
             
             // Format date for display
             const displayDate = new Date(date).toLocaleDateString('en-US', {
@@ -124,12 +124,12 @@ class ContactCalendar {
                 month: 'long',
                 day: 'numeric'
             });
-            console.log('Display date:', displayDate);
+            safeConsole.log('Display date:', displayDate);
             
             // Check if date is blocked or closed
             const isBlocked = calendar.isDateBlocked(date);
             const isClosed = calendar.calendarData.businessHours[dayOfWeek.toLowerCase()].length === 0;
-            console.log('Is blocked:', isBlocked, 'Is closed:', isClosed);
+            safeConsole.log('Is blocked:', isBlocked, 'Is closed:', isClosed);
             
             // Check if date is today
             const isSameDay = calendar.isRequiringPhoneCall(date);
@@ -167,7 +167,7 @@ class ContactCalendar {
             } else {
                 // Get available slots
                 const availableSlots = calendar.getAvailableSlots(date);
-                console.log('Available slots:', availableSlots);
+                safeConsole.log('Available slots:', availableSlots);
                 
                 if (availableSlots.length === 0) {
                     html += `
@@ -199,9 +199,9 @@ class ContactCalendar {
                         return hour >= 17;
                     });
                     
-                    console.log('Morning slots:', morning);
-                    console.log('Afternoon slots:', afternoon);
-                    console.log('Evening slots:', evening);
+                    safeConsole.log('Morning slots:', morning);
+                    safeConsole.log('Afternoon slots:', afternoon);
+                    safeConsole.log('Evening slots:', evening);
                     
                     // Format times for display
                     const formatTimeList = (slots) => {
@@ -273,7 +273,7 @@ class ContactCalendar {
             
             // Update availability display
             if (this.availabilityElement) {
-                console.log('Updating availability element with HTML');
+                safeConsole.log('Updating availability element with HTML');
                 this.availabilityElement.innerHTML = html;
                 
                 // Scroll to availability
