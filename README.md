@@ -11,7 +11,7 @@
 
 # 🔥 CRT CHAOS - Interactive Puzzle Experience 🔥
 
-[![Live Demo](https://img.shields.io/badge/🎮_PLAY_NOW-LIVE-00ff00?style=for-the-badge)](https://YOUR-SITE-HERE.com)
+[![Live Demo](https://img.shields.io/badge/🎮_PLAY_NOW-LIVE-00ff00?style=for-the-badge)](https://www.crtchaos.com)
 [![Status](https://img.shields.io/badge/STATUS-SYSTEM_UNSTABLE-ff0000?style=for-the-badge)](https://github.com/VonHoltenCodes/crt-chaos)
 [![License](https://img.shields.io/badge/LICENSE-MIT-ffff00?style=for-the-badge)](LICENSE)
 [![Puzzles](https://img.shields.io/badge/PUZZLES-8_MALFUNCTIONS-ff00ff?style=for-the-badge)](https://github.com/VonHoltenCodes/crt-chaos)
@@ -151,7 +151,7 @@
 ## 🚀 Quick Start
 
 ### 🎮 Play Online
-**[➡️ PLAY NOW - LIVE DEMO](https://YOUR-SITE-HERE.com)** *(Replace with your actual URL)*
+**[➡️ PLAY NOW - LIVE DEMO](https://www.crtchaos.com)**
 
 ### 💻 Run Locally
 
@@ -370,6 +370,6 @@ Side effects may include:
 
 <br>
 
-[![Play Now](https://img.shields.io/badge/🎮_ENTER_THE_CHAOS-PLAY_NOW-00ff00?style=for-the-badge&labelColor=000000)](https://YOUR-SITE-HERE.com)
+[![Play Now](https://img.shields.io/badge/🎮_ENTER_THE_CHAOS-PLAY_NOW-00ff00?style=for-the-badge&labelColor=000000)](https://www.crtchaos.com)
 
 </div>
