@@ -168,6 +168,17 @@ class SentientTerminal {
         safeConsole.log('Modal display style:', modal.style.display);
         safeConsole.log('Modal computed style:', window.getComputedStyle(modal).display);
         
+        // Force display to ensure it's visible
+        modal.style.setProperty('display', 'flex', 'important');
+        
+        // Debug: Check if something is setting it back to none
+        setTimeout(() => {
+            console.log('[DEBUG] Modal display after 100ms:', modal.style.display);
+            console.log('[DEBUG] Modal computed display after 100ms:', window.getComputedStyle(modal).display);
+            console.log('[DEBUG] Modal visibility:', window.getComputedStyle(modal).visibility);
+            console.log('[DEBUG] Modal opacity:', window.getComputedStyle(modal).opacity);
+        }, 100);
+        
         const input = document.getElementById('sentient-input');
         if (input) {
             input.focus();
@@ -325,7 +336,7 @@ class SentientTerminal {
 }
 
 // Initialize when window loads
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     safeConsole.log('Window loaded, initializing Sentient Terminal...');
     window.sentientTerminal = new SentientTerminal();
     

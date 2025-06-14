@@ -211,23 +211,7 @@ class TimeTravelingClock {
         });
         
         const modal = document.getElementById('time-clock-modal');
-        console.log('[TIME CLOCK DEBUG] Modal element:', modal);
-        console.log('[TIME CLOCK DEBUG] Modal display before:', modal.style.display);
         modal.style.display = 'flex';
-        console.log('[TIME CLOCK DEBUG] Modal display after:', modal.style.display);
-        
-        // Force display to ensure it's visible
-        modal.style.setProperty('display', 'flex', 'important');
-        
-        // Check computed styles
-        setTimeout(() => {
-            const computed = window.getComputedStyle(modal);
-            console.log('[TIME CLOCK DEBUG] After 100ms:');
-            console.log('  - display:', computed.display);
-            console.log('  - visibility:', computed.visibility);
-            console.log('  - opacity:', computed.opacity);
-            console.log('  - z-index:', computed.zIndex);
-        }, 100);
         
         // Start the updates
         this.startTimeUpdate();
@@ -242,91 +226,6 @@ class TimeTravelingClock {
             this.updateTimeDisplays();
         }, 100);
     }
-    
-    startTemporalChaos() {
-        // AGGRESSIVE temporal chaos!
-        this.glitchInterval = setInterval(() => {
-            if (!this.isActive || this.solved) return;
-            
-            const currentTime = Date.now();
-            const elapsed = currentTime - this.baseTime;
-            
-            const times = Object.entries(this.timeStreams).map(([name, stream]) => {
-                let totalOffset = stream.offset;
-                if (stream.running) {
-                    totalOffset += elapsed;
-                }
-                return this.baseTime + totalOffset;
-            });
-            
-            const avg = times.reduce((a, b) => a + b, 0) / times.length;
-            const variance = Math.sqrt(times.reduce((sum, time) => sum + Math.pow(time - avg, 2), 0) / times.length);
-            
-            // Much more aggressive glitching
-            if (variance > 8000) {
-                this.temporalGlitch();
-                window.chaos.increaseChaos(0.2);
-            } else if (variance > 5000 && Math.random() > 0.5) {
-                this.temporalGlitch();
-                if (Math.random() > 0.7) {
-                    window.chaos.increaseChaos(0.1);
-                }
-            } else if (variance > 3000 && Math.random() > 0.8) {
-                this.temporalGlitch();
-            }
-        }, 2000); // More frequent checks
-    }
-    
-    temporalGlitch() {
-        const glitchTypes = [
-            () => this.visualGlitch(),
-            () => this.scrambleDisplay(),
-            () => this.showTemporalMessage()
-        ];
-        
-        const glitch = glitchTypes[Math.floor(Math.random() * glitchTypes.length)];
-        glitch();
-    }
-    
-    visualGlitch() {
-        const container = document.querySelector('.time-clock-container');
-        container.style.animation = 'timeGlitch 0.5s';
-        setTimeout(() => {
-            container.style.animation = '';
-        }, 500);
-    }
-    
-    scrambleDisplay() {
-        this.addMessage("TEMPORAL INTERFERENCE DETECTED!", 'error');
-        
-        const displays = ['unix-time', 'binary-time', 'hex-time', 'roman-time', 'mayan-time'];
-        const randomDisplay = displays[Math.floor(Math.random() * displays.length)];
-        const element = document.getElementById(randomDisplay);
-        
-        if (element) {
-            const original = element.textContent;
-            element.textContent = '???ERROR???';
-            element.style.color = '#ff0000';
-            
-            setTimeout(() => {
-                element.textContent = original;
-                element.style.color = '';
-            }, 1000);
-        }
-    }
-    
-    showTemporalMessage() {
-        const messages = [
-            "Time is an illusion...",
-            "Past, present, future - all one",
-            "The clocks are watching you",
-            "Tick tock goes the temporal lock",
-            "Reality phase shift detected"
-        ];
-        
-        this.addMessage(messages[Math.floor(Math.random() * messages.length)], 'warning');
-    }
-    
     
     updateTimeDisplays() {
         const currentTime = Date.now();
@@ -489,15 +388,7 @@ class TimeTravelingClock {
         
         if (variance > 10000) {
             this.addMessage("SYNC FAILED: Time streams too divergent!", 'error');
-            window.chaos.increaseChaos(2); // Big penalty for bad sync attempts
-            this.temporalGlitch();
-            // Make things go REALLY crazy
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => this.temporalGlitch(), i * 500);
-            }
-        } else if (variance > 5000) {
-            this.addMessage("WARNING: Temporal instability detected!", 'warning');
-            window.chaos.increaseChaos(0.5);
+            window.chaos.increaseChaos(1);
             this.temporalGlitch();
         } else if (variance > 1000) {
             this.addMessage("Getting closer... keep adjusting!", 'warning');
@@ -506,6 +397,81 @@ class TimeTravelingClock {
         }
     }
     
+    startTemporalChaos() {
+        // Simplified chaos - less aggressive
+        this.glitchInterval = setInterval(() => {
+            if (!this.isActive || this.solved) return;
+            
+            const currentTime = Date.now();
+            const elapsed = currentTime - this.baseTime;
+            
+            const times = Object.entries(this.timeStreams).map(([name, stream]) => {
+                let totalOffset = stream.offset;
+                if (stream.running) {
+                    totalOffset += elapsed;
+                }
+                return this.baseTime + totalOffset;
+            });
+            
+            const avg = times.reduce((a, b) => a + b, 0) / times.length;
+            const variance = Math.sqrt(times.reduce((sum, time) => sum + Math.pow(time - avg, 2), 0) / times.length);
+            
+            // Only glitch when variance is high
+            if (variance > 5000 && Math.random() > 0.7) {
+                this.temporalGlitch();
+            }
+        }, 3000);
+    }
+    
+    temporalGlitch() {
+        const glitchTypes = [
+            () => this.visualGlitch(),
+            () => this.scrambleDisplay(),
+            () => this.showTemporalMessage()
+        ];
+        
+        const glitch = glitchTypes[Math.floor(Math.random() * glitchTypes.length)];
+        glitch();
+    }
+    
+    visualGlitch() {
+        const container = document.querySelector('.time-clock-container');
+        container.style.animation = 'timeGlitch 0.5s';
+        setTimeout(() => {
+            container.style.animation = '';
+        }, 500);
+    }
+    
+    scrambleDisplay() {
+        this.addMessage("TEMPORAL INTERFERENCE DETECTED!", 'error');
+        
+        const displays = ['unix-time', 'binary-time', 'hex-time', 'roman-time', 'mayan-time'];
+        const randomDisplay = displays[Math.floor(Math.random() * displays.length)];
+        const element = document.getElementById(randomDisplay);
+        
+        if (element) {
+            const original = element.textContent;
+            element.textContent = '???ERROR???';
+            element.style.color = '#ff0000';
+            
+            setTimeout(() => {
+                element.textContent = original;
+                element.style.color = '';
+            }, 1000);
+        }
+    }
+    
+    showTemporalMessage() {
+        const messages = [
+            "Time is an illusion...",
+            "Past, present, future - all one",
+            "The clocks are watching you",
+            "Tick tock goes the temporal lock",
+            "Reality phase shift detected"
+        ];
+        
+        this.addMessage(messages[Math.floor(Math.random() * messages.length)], 'warning');
+    }
     
     toRoman(num) {
         if (num < 1) return '0';
@@ -522,9 +488,7 @@ class TimeTravelingClock {
         return result;
     }
     
-    
     toMayan(timestamp) {
-        // Simplified Mayan representation using dots and bars
         const date = new Date(timestamp);
         const hour = date.getHours();
         const minute = date.getMinutes();
@@ -535,7 +499,6 @@ class TimeTravelingClock {
         
         return `🗿 ${symbols[hour % 10]} : ${symbols[tens]} ${symbols[ones]}`;
     }
-    
     
     addMessage(text, type = 'info') {
         const messagesDiv = document.getElementById('temporal-messages');
@@ -560,11 +523,8 @@ class TimeTravelingClock {
         this.addMessage("All time streams aligned!", 'success');
         this.addMessage("Reality stabilizing...", 'success');
         
-        // Stop ALL chaos effects immediately
+        // Stop the chaos
         clearInterval(this.glitchInterval);
-        clearInterval(this.timeUpdateInterval);
-        this.glitchInterval = null;
-        this.timeUpdateInterval = null;
         
         // Reset all streams to synchronized
         Object.keys(this.timeStreams).forEach(stream => {
@@ -587,11 +547,6 @@ class TimeTravelingClock {
         clearInterval(this.glitchInterval);
         clearInterval(this.timeUpdateInterval);
         
-        // Remove time effects
-        document.querySelectorAll('[style*="timeGlitch"]').forEach(el => {
-            el.style.animation = '';
-        });
-        
         document.getElementById('time-clock-modal').style.display = 'none';
     }
 }
@@ -612,297 +567,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     }
 });
-
-// Add styles
-const timeClockStyle = document.createElement('style');
-timeClockStyle.textContent = `
-    @keyframes timeGlitch {
-        0% { transform: translateX(0); }
-        10% { transform: translateX(-2px) translateY(1px); }
-        20% { transform: translateX(2px) translateY(-1px); }
-        30% { transform: translateX(-1px) translateY(2px); }
-        40% { transform: translateX(1px) translateY(-2px); }
-        50% { transform: translateX(0) translateY(0) scaleX(-1); }
-        60% { transform: translateX(2px) translateY(1px) scaleX(1); }
-        70% { transform: translateX(-2px) translateY(-1px); }
-        80% { transform: translateX(1px) translateY(2px); }
-        90% { transform: translateX(-1px) translateY(-2px); }
-        100% { transform: translateX(0); }
-    }
-    
-    @keyframes reverseTime {
-        0% { transform: scaleX(1); }
-        50% { transform: scaleX(-1); }
-        100% { transform: scaleX(1); }
-    }
-    
-    @keyframes timeFlash {
-        0% { opacity: 0; }
-        50% { opacity: 0.8; }
-        100% { opacity: 0; }
-    }
-    
-    @keyframes rewindEffect {
-        0% { 
-            transform: rotate(0deg) scale(1);
-            filter: hue-rotate(0deg);
-        }
-        50% { 
-            transform: rotate(180deg) scale(1.1);
-            filter: hue-rotate(180deg);
-        }
-        100% { 
-            transform: rotate(360deg) scale(1);
-            filter: hue-rotate(360deg);
-        }
-    }
-    
-    @keyframes freezePulse {
-        0% { 
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        50% { 
-            opacity: 0.5;
-            transform: scale(1.2);
-        }
-        100% { 
-            opacity: 0;
-            transform: scale(1);
-        }
-    }
-    
-    .time-clock-container {
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-    
-    .time-clock-container .terminal-body {
-        max-height: calc(90vh - 60px);
-        overflow-y: auto;
-        padding: 15px;
-    }
-    
-    /* Protect modal from body transforms */
-    #time-clock-modal {
-        transform: none !important;
-        filter: none !important;
-        position: fixed !important;
-        isolation: isolate;
-    }
-    
-    .time-clock-container {
-        transform: none !important;
-        filter: none !important;
-        position: relative;
-        z-index: 10001;
-        isolation: isolate;
-    }
-    
-    /* Ensure buttons remain clickable during glitches */
-    .time-controls button {
-        position: relative;
-        z-index: 10002;
-        pointer-events: auto !important;
-    }
-    
-    /* Protect all interactive elements */
-    #time-clock-modal * {
-        pointer-events: auto !important;
-    }
-    
-    .temporal-warning {
-        background: rgba(255, 0, 0, 0.1);
-        border: 2px solid #ff0000;
-        padding: 10px;
-        margin-bottom: 15px;
-        text-align: center;
-        animation: pulse 2s infinite;
-        font-size: 14px;
-    }
-    
-    .time-displays {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 10px;
-        margin: 15px 0;
-    }
-    
-    .time-display {
-        background: rgba(0, 0, 0, 0.5);
-        border: 2px solid var(--neon-green);
-        padding: 10px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .time-display.paused {
-        border-color: #ff0000;
-        opacity: 0.7;
-    }
-    
-    .time-display.paused::after {
-        content: 'PAUSED';
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        color: #ff0000;
-        font-size: 10px;
-        font-weight: bold;
-        animation: pulse 1s infinite;
-    }
-    
-    .time-display::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.1), transparent);
-        transform: rotate(45deg);
-        animation: timeStream 3s linear infinite;
-    }
-    
-    @keyframes timeStream {
-        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-    }
-    
-    .time-display h3 {
-        margin: 0 0 5px 0;
-        color: var(--neon-green);
-        font-size: 12px;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .time-value {
-        font-size: 18px;
-        font-family: 'Courier New', monospace;
-        color: var(--neon-yellow);
-        margin: 5px 0;
-        position: relative;
-        z-index: 1;
-        min-height: 24px;
-    }
-    
-    .binary-time {
-        font-family: monospace;
-        letter-spacing: 2px;
-    }
-    
-    .hex-time {
-        text-transform: uppercase;
-    }
-    
-    .roman-time {
-        font-family: 'Times New Roman', serif;
-    }
-    
-    .mayan-time {
-        font-size: 16px;
-        letter-spacing: 3px;
-    }
-    
-    .time-controls {
-        display: flex;
-        justify-content: center;
-        gap: 2px;
-        position: relative;
-        z-index: 1;
-        margin-top: 5px;
-    }
-    
-    .time-controls button {
-        padding: 3px 6px;
-        background: transparent;
-        border: 1px solid var(--neon-green);
-        color: var(--neon-green);
-        cursor: pointer;
-        font-size: 10px;
-        transition: all 0.3s;
-    }
-    
-    .time-controls button:hover {
-        background: var(--neon-green);
-        color: #000;
-    }
-    
-    .sync-status {
-        background: rgba(0, 0, 0, 0.7);
-        border: 1px solid var(--neon-yellow);
-        padding: 8px;
-        margin: 10px 0;
-        text-align: center;
-    }
-    
-    .sync-status p {
-        margin: 3px 0;
-        color: var(--neon-yellow);
-        font-size: 13px;
-    }
-    
-    .sync-status span {
-        color: var(--neon-green);
-        font-weight: bold;
-    }
-    
-    .temporal-sync {
-        width: 100%;
-        padding: 10px;
-        background: transparent;
-        border: 2px solid var(--neon-yellow);
-        color: var(--neon-yellow);
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s;
-        text-transform: uppercase;
-        font-size: 14px;
-    }
-    
-    .temporal-sync:hover {
-        background: var(--neon-yellow);
-        color: #000;
-        transform: scale(1.05);
-    }
-    
-    .temporal-messages {
-        margin-top: 10px;
-        max-height: 100px;
-        overflow-y: auto;
-        padding: 8px;
-        background: rgba(0, 0, 0, 0.5);
-        border: 1px solid #333;
-        font-size: 11px;
-    }
-    
-    .temporal-msg {
-        margin: 5px 0;
-        padding: 5px;
-        font-size: 12px;
-        font-family: 'Courier New', monospace;
-    }
-    
-    .temporal-msg-info {
-        color: #00ff00;
-    }
-    
-    .temporal-msg-warning {
-        color: #ffff00;
-    }
-    
-    .temporal-msg-error {
-        color: #ff0000;
-        font-weight: bold;
-    }
-    
-    .temporal-msg-success {
-        color: #00ffff;
-        font-weight: bold;
-    }
-`;
-document.head.appendChild(timeClockStyle);
 
 // Keep existing styles from original file

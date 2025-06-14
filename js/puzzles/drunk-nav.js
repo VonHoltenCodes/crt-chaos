@@ -11,15 +11,23 @@ class DrunkNavigation {
         this.clickAttempts = 0;
         this.missClicks = 0;
         this.solved = false;
+        this.sobrietyTestVisible = false;
+        this.consecutiveMisses = 0;
+        this.teleportEnabled = true;
+        this.mirageTimer = null;
+        this.drunkVisionEnabled = true;
         
         this.menuItems = [
-            { text: 'Home', href: '#home', correct: false },
-            { text: 'About', href: '#about', correct: false },
-            { text: 'Services', href: '#services', correct: false },
-            { text: 'Contact', href: '#contact', correct: false },
-            { text: 'Sobriety Test', href: '#sobriety', correct: true }, // The goal
-            { text: 'Portfolio', href: '#portfolio', correct: false },
-            { text: 'Blog', href: '#blog', correct: false }
+            { text: 'Home', href: '#home', correct: false, decoy: false },
+            { text: 'About', href: '#about', correct: false, decoy: false },
+            { text: 'Services', href: '#services', correct: false, decoy: false },
+            { text: 'Contact', href: '#contact', correct: false, decoy: false },
+            { text: 'Sobriety Test', href: '#sobriety', correct: true, decoy: false }, // The goal
+            { text: 'Portfolio', href: '#portfolio', correct: false, decoy: false },
+            { text: 'Blog', href: '#blog', correct: false, decoy: false },
+            { text: 'Sobriety Fest', href: '#fake1', correct: false, decoy: true }, // Decoy!
+            { text: 'Sanity Test', href: '#fake2', correct: false, decoy: true }, // Decoy!
+            { text: 'Society Test', href: '#fake3', correct: false, decoy: true } // Decoy!
         ];
         
         this.drunkPhrases = [
@@ -31,10 +39,16 @@ class DrunkNavigation {
             "Why is everything so wobbly?",
             "I can quit clicking anytime I want!",
             "The navigation is spinning... or is it me?",
-            "These links are playing hard to get!"
+            "These links are playing hard to get!",
+            "Was that the right one? They all look the same...",
+            "I think the menu is mocking me!",
+            "Stop teleporting away from me!",
+            "Why are there THREE of everything?!"
         ];
         
         this.swayIntervals = [];
+        this.mirageIntervals = [];
+        this.currentMirages = [];
     }
     
     createDrunkModal() {
@@ -95,7 +109,7 @@ class DrunkNavigation {
                         <div class="drunk-messages" id="drunk-messages"></div>
                         
                         <div class="puzzle-hint">
-                            <p>Hint: The menu items are drunk, not you! Try to click on "Sobriety Test" - patience and timing are key.</p>
+                            <p>Hint: The Sobriety Test is hidden at first! Click around to prove your determination. Beware of decoys and mirages!</p>
                         </div>
                     </div>
                 </div>
@@ -122,7 +136,11 @@ class DrunkNavigation {
         this.solved = false;
         this.clickAttempts = 0;
         this.missClicks = 0;
+        this.consecutiveMisses = 0;
         this.drunkLevel = 10;
+        this.sobrietyTestVisible = false;
+        this.teleportEnabled = true;
+        this.drunkVisionEnabled = true;
         
         const modal = document.getElementById('drunk-nav-modal');
         modal.style.display = 'flex';
@@ -132,9 +150,15 @@ class DrunkNavigation {
         this.updateDrunkMeter();
         
         this.addMessage("*hic* Welcome to the drunk navigation system!", 'drunk');
+        this.addMessage("Warning: Sobriety Test only appears after proving your determination!", 'drunk');
         
         // Make hamburger menu drunk too
         this.makeHamburgerDrunk();
+        
+        // Start the new difficulty features
+        this.startMirageEffect();
+        this.startDrunkVision();
+        this.hideCorrectButton();
     }
     
     populateMenu() {
@@ -181,15 +205,21 @@ class DrunkNavigation {
         
         menuItems.forEach((item, index) => {
             // Random sway parameters for each item
-            const swayAmount = 10 + Math.random() * 20;
-            const swaySpeed = 2 + Math.random() * 3;
-            const rotateAmount = 5 + Math.random() * 10;
+            const swayAmount = 15 + Math.random() * 30; // Increased!
+            const swaySpeed = 1.5 + Math.random() * 2.5; // Faster!
+            const rotateAmount = 10 + Math.random() * 20; // More rotation!
             
             // Apply drunk animation
             item.style.animation = `drunkSway ${swaySpeed}s ease-in-out infinite`;
             item.style.animationDelay = `${index * 0.2}s`;
             
-            // Make click targets move
+            // Add teleportation on hover for some items
+            const link = item.querySelector('.drunk-link');
+            if (link && Math.random() > 0.3) {
+                this.teleportOnHover(link);
+            }
+            
+            // Make click targets move more erratically
             const interval = setInterval(() => {
                 if (!this.isActive) return;
                 
@@ -197,17 +227,24 @@ class DrunkNavigation {
                 if (link && this.drunkLevel > 0) {
                     const offsetX = (Math.random() - 0.5) * swayAmount * (this.drunkLevel / 10);
                     const offsetY = (Math.random() - 0.5) * swayAmount * (this.drunkLevel / 10);
-                    link.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${(Math.random() - 0.5) * rotateAmount}deg)`;
+                    const rotation = (Math.random() - 0.5) * rotateAmount;
+                    link.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${rotation}deg)`;
+                    
+                    // Random scale changes
+                    if (Math.random() > 0.9) {
+                        link.style.transform += ` scale(${0.8 + Math.random() * 0.4})`;
+                    }
                 }
             }, 100);
             
             this.swayIntervals.push(interval);
         });
         
-        // Make dropdowns fall upward
+        // Make dropdowns fall upward and sideways
         document.querySelectorAll('.drunk-dropdown').forEach(dropdown => {
             dropdown.style.bottom = '100%';
             dropdown.style.top = 'auto';
+            dropdown.style.transform = `rotate(${Math.random() * 360}deg)`;
         });
     }
     
@@ -244,13 +281,33 @@ class DrunkNavigation {
         const index = parseInt(e.target.dataset.index);
         const item = this.menuItems[index];
         
-        if (item.correct) {
-            // Clicked on Sobriety Test!
+        if (item.correct && this.sobrietyTestVisible) {
+            // Clicked on the real Sobriety Test!
+            this.consecutiveMisses = 0;
             this.startSobrietyTest();
+        } else if (item.decoy) {
+            // Clicked on a decoy!
+            this.missClicks++;
+            this.consecutiveMisses++;
+            this.addMessage("WRONG! That's a decoy! The menu laughs at you!", 'drunk');
+            this.addMessage("Sobriety Fest? Really? You fell for that?", 'drunk');
+            
+            // Punish with extra drunk effect
+            this.drunkLevel = Math.min(10, this.drunkLevel + 1);
+            this.updateDrunkMeter();
+            this.triggerDrunkEffect();
+            this.triggerDrunkEffect(); // Double punishment!
         } else {
             // Wrong item
+            this.consecutiveMisses++;
             const phrase = this.drunkPhrases[Math.floor(Math.random() * this.drunkPhrases.length)];
             this.addMessage(phrase, 'drunk');
+            
+            // Check if we should reveal the real button
+            if (this.clickAttempts >= 10 && !this.sobrietyTestVisible) {
+                this.addMessage("Your determination is noted...", 'success');
+                this.revealSobrietyTest();
+            }
             
             // Make things worse
             if (this.drunkLevel < 10) {
@@ -260,6 +317,13 @@ class DrunkNavigation {
             
             // Random effect
             this.triggerDrunkEffect();
+        }
+        
+        // Extra punishment for too many consecutive misses
+        if (this.consecutiveMisses >= 5) {
+            this.addMessage("The menu is getting angry at your incompetence!", 'drunk');
+            this.spinMenu();
+            this.consecutiveMisses = 0;
         }
         
         this.updateAccuracy();
@@ -432,12 +496,168 @@ class DrunkNavigation {
     close() {
         this.isActive = false;
         this.swayIntervals.forEach(interval => clearInterval(interval));
+        this.mirageIntervals.forEach(interval => clearInterval(interval));
+        if (this.mirageTimer) clearInterval(this.mirageTimer);
+        this.currentMirages.forEach(mirage => mirage.remove());
+        this.currentMirages = [];
         document.getElementById('drunk-nav-modal').style.display = 'none';
+    }
+    
+    // New difficulty methods
+    hideCorrectButton() {
+        // Initially hide the real Sobriety Test button
+        const correctItem = this.menuItems.find(item => item.correct);
+        const correctLink = document.querySelector(`[data-index="${this.menuItems.indexOf(correctItem)}"]`);
+        if (correctLink && correctLink.parentElement) {
+            correctLink.parentElement.style.display = 'none';
+        }
+    }
+    
+    revealSobrietyTest() {
+        if (this.sobrietyTestVisible) return;
+        
+        this.sobrietyTestVisible = true;
+        const correctItem = this.menuItems.find(item => item.correct);
+        const correctLink = document.querySelector(`[data-index="${this.menuItems.indexOf(correctItem)}"]`);
+        
+        if (correctLink && correctLink.parentElement) {
+            this.addMessage("The real Sobriety Test materializes!", 'success');
+            correctLink.parentElement.style.display = 'block';
+            correctLink.parentElement.style.animation = 'sobrietyReveal 2s ease-in-out';
+            
+            // Make it extra wobbly when it appears
+            correctLink.style.animation = 'extremeWobble 1s ease-in-out infinite';
+        }
+    }
+    
+    startMirageEffect() {
+        // Create fake duplicates that disappear when clicked
+        this.mirageTimer = setInterval(() => {
+            if (!this.isActive || this.drunkLevel < 5) return;
+            
+            this.createMirage();
+        }, 3000);
+    }
+    
+    createMirage() {
+        const menuItems = document.querySelectorAll('.drunk-menu-item');
+        const randomItem = menuItems[Math.floor(Math.random() * menuItems.length)];
+        
+        if (!randomItem) return;
+        
+        const mirage = randomItem.cloneNode(true);
+        mirage.className = 'drunk-menu-item mirage';
+        mirage.style.position = 'absolute';
+        mirage.style.left = Math.random() * 80 + '%';
+        mirage.style.top = Math.random() * 80 + '%';
+        mirage.style.opacity = '0.7';
+        mirage.style.filter = 'blur(1px)';
+        
+        // Make mirage disappear on click
+        const mirageLink = mirage.querySelector('.drunk-link');
+        if (mirageLink) {
+            mirageLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.addMessage("That was just a mirage! *poof*", 'drunk');
+                mirage.style.animation = 'mirageFade 0.5s ease-out';
+                setTimeout(() => mirage.remove(), 500);
+                this.missClicks++;
+                this.consecutiveMisses++;
+                this.updateAccuracy();
+            });
+        }
+        
+        document.getElementById('drunk-navigation').appendChild(mirage);
+        this.currentMirages.push(mirage);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (mirage.parentElement) {
+                mirage.style.animation = 'mirageFade 1s ease-out';
+                setTimeout(() => mirage.remove(), 1000);
+            }
+        }, 5000);
+    }
+    
+    startDrunkVision() {
+        // Periodically add visual impairments
+        setInterval(() => {
+            if (!this.isActive || !this.drunkVisionEnabled) return;
+            
+            const effects = [
+                () => this.doubleVision(),
+                () => this.tunnelVision(),
+                () => this.colorBlindness(),
+                () => this.pixelateVision()
+            ];
+            
+            if (this.drunkLevel > 7) {
+                const effect = effects[Math.floor(Math.random() * effects.length)];
+                effect();
+            }
+        }, 4000);
+    }
+    
+    doubleVision() {
+        this.addMessage("Seeing double!", 'drunk');
+        const container = document.querySelector('.drunk-nav-container');
+        container.style.filter = 'blur(2px)';
+        container.style.textShadow = '3px 3px 5px rgba(0,255,0,0.5)';
+        
+        setTimeout(() => {
+            container.style.filter = '';
+            container.style.textShadow = '';
+        }, 2000);
+    }
+    
+    tunnelVision() {
+        this.addMessage("Tunnel vision kicking in...", 'drunk');
+        const modal = document.getElementById('drunk-nav-modal');
+        modal.style.boxShadow = 'inset 0 0 200px 100px black';
+        
+        setTimeout(() => {
+            modal.style.boxShadow = '';
+        }, 3000);
+    }
+    
+    colorBlindness() {
+        this.addMessage("Colors look weird...", 'drunk');
+        const container = document.querySelector('.drunk-nav-container');
+        container.style.filter = 'grayscale(80%)';
+        
+        setTimeout(() => {
+            container.style.filter = '';
+        }, 2500);
+    }
+    
+    pixelateVision() {
+        this.addMessage("Everything's so pixelated!", 'drunk');
+        const container = document.querySelector('.drunk-nav-container');
+        container.style.imageRendering = 'pixelated';
+        container.style.filter = 'contrast(200%)';
+        
+        setTimeout(() => {
+            container.style.imageRendering = '';
+            container.style.filter = '';
+        }, 2000);
+    }
+    
+    teleportOnHover(element) {
+        if (!this.teleportEnabled || this.drunkLevel < 8) return;
+        
+        element.addEventListener('mouseenter', () => {
+            if (Math.random() > 0.5) {
+                const newX = Math.random() * 60 - 30;
+                const newY = Math.random() * 60 - 30;
+                element.style.transform = `translate(${newX}px, ${newY}px) rotate(${Math.random() * 360}deg)`;
+                this.addMessage("Gotcha! Try again!", 'drunk');
+            }
+        });
     }
 }
 
 // Initialize
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     safeConsole.log('Initializing Drunk Navigation...');
     window.drunkNav = new DrunkNavigation();
     safeConsole.log('Drunk Navigation instance created:', window.drunkNav);
@@ -676,6 +896,54 @@ drunkNavStyle.textContent = `
     
     .puzzle-hint p {
         margin: 0;
+    }
+    
+    @keyframes sobrietyReveal {
+        0% {
+            opacity: 0;
+            transform: scale(0) rotate(720deg);
+        }
+        50% {
+            opacity: 0.5;
+            transform: scale(1.5) rotate(360deg);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+    }
+    
+    @keyframes extremeWobble {
+        0% { transform: translateX(0) translateY(0) rotate(0deg) scale(1); }
+        25% { transform: translateX(-20px) translateY(-10px) rotate(-10deg) scale(1.1); }
+        50% { transform: translateX(20px) translateY(10px) rotate(10deg) scale(0.9); }
+        75% { transform: translateX(-10px) translateY(5px) rotate(-5deg) scale(1.05); }
+        100% { transform: translateX(0) translateY(0) rotate(0deg) scale(1); }
+    }
+    
+    @keyframes mirageFade {
+        0% {
+            opacity: 0.7;
+            transform: scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(0.5) rotate(180deg);
+        }
+    }
+    
+    .mirage {
+        z-index: 999;
+        pointer-events: all;
+    }
+    
+    .drunk-menu-item {
+        z-index: 1000;
+    }
+    
+    .drunk-link {
+        position: relative;
+        z-index: 1001;
     }
 `;
 document.head.appendChild(drunkNavStyle);

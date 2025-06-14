@@ -1,3 +1,5 @@
+<div align="center">
+
 ```
  ██████╗██████╗ ████████╗     ██████╗██╗  ██╗ █████╗  ██████╗ ███████╗
 ██╔════╝██╔══██╗╚══██╔══╝    ██╔════╝██║  ██║██╔══██╗██╔═══██╗██╔════╝
@@ -7,55 +9,113 @@
  ╚═════╝╚═╝  ╚═╝   ╚═╝        ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
 ```
 
-# CRT CHAOS - Interactive Puzzle Website
+# 🔥 CRT CHAOS - Interactive Puzzle Experience 🔥
 
-![CRT CHAOS](https://img.shields.io/badge/status-SYSTEM%20UNSTABLE-red)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Puzzles](https://img.shields.io/badge/puzzles-8%20MALFUNCTIONS-yellow)
+[![Live Demo](https://img.shields.io/badge/🎮_PLAY_NOW-LIVE-00ff00?style=for-the-badge)](https://YOUR-SITE-HERE.com)
+[![Status](https://img.shields.io/badge/STATUS-SYSTEM_UNSTABLE-ff0000?style=for-the-badge)](https://github.com/VonHoltenCodes/crt-chaos)
+[![License](https://img.shields.io/badge/LICENSE-MIT-ffff00?style=for-the-badge)](LICENSE)
+[![Puzzles](https://img.shields.io/badge/PUZZLES-8_MALFUNCTIONS-ff00ff?style=for-the-badge)](https://github.com/VonHoltenCodes/crt-chaos)
 
-A retro-styled interactive puzzle website that simulates a broken CRT monitor system. Players must solve 8 unique puzzles to restore system stability while dealing with increasing chaos levels that affect the entire interface.
+**🚨 WARNING: This system is experiencing critical failures. Multiple malfunctions detected. Chaos level approaching maximum threshold. Debug at your own risk. 🚨**
 
-## 🎮 Overview
+![CRT Chaos Hero Section](Screenshots/Hero.png)
 
-CRT CHAOS is an immersive web experience where you're tasked with debugging a malfunctioning computer system. Each puzzle represents a different system component that has gained sentience or broken in creative ways. As you progress, the website itself becomes increasingly chaotic with glitch effects, making the challenge progressively harder.
+</div>
 
-## 🚀 Features
+---
 
-- **8 Unique Puzzles**: Each with distinct mechanics and personality
-- **Dynamic Chaos System**: Visual effects intensify as chaos levels increase
-- **Retro CRT Aesthetic**: Authentic scanlines, screen flicker, and phosphor glow
-- **Panic Menu**: Emergency controls when things get too chaotic (Press ESC)
-- **Progress Persistence**: LocalStorage saves your progress
-- **Terminal Interface**: Command-line access for advanced users
-- **Easter Eggs**: Hidden features and secret commands
+## 🎮 Experience the Chaos
 
-## 🧩 The Puzzles
+**CRT CHAOS** is an immersive web-based puzzle game where you're tasked with debugging a malfunctioning computer system. Each puzzle represents a different system component that has gained sentience or broken in creative ways. As you progress, the website itself becomes increasingly chaotic with glitch effects, making the challenge progressively harder.
 
-### ✅ Completed Puzzles (8/8)
+<div align="center">
+  <img src="Screenshots/games.png" alt="CRT Chaos Puzzle Grid" width="80%">
+  <p><em>Eight unique puzzles await your debugging skills</em></p>
+</div>
 
-1. **Sentient Terminal** - A terminal that refuses commands until you're nice to it
-   - Solution: Be polite (please, thank you), then "fix yourself"
-   
-2. **Paranoid Password** - Login system that thinks everyone is a spy
-   - Solution: Username "trustno1", password "thetruthisoutthere"
-   
-3. **Time-Traveling Clock** - Synchronize temporal anomalies across timelines
-   - Solution: Set all clocks to the same time to stabilize
-   
-4. **Drunk Navigation** - Menu items that won't stay still
-   - Solution: Click "Sobriety Test" when it appears
-   
-5. **Conspiracy Search** - Search engine with escalating paranoia
-   - Solution: Search for "the truth"
-   
-6. **Existential Error** - 404 page having an identity crisis
-   - Solution: Reassure it with "you have purpose"
-   
-7. **Mime Modal** - Communicate through emojis only
-   - Solution: 👋 → 🚪 → 🔓 → 🎉 (Wave → Door → Unlock → Celebrate)
-   
-8. **Recursive Iframe Maze** - Navigate through nested portal dimensions
-   - Solution: Alpha → Gamma → Beta → Delta → Omega
+## ✨ Key Features
+
+### 🎯 Core Gameplay
+- **8 Mind-Bending Puzzles** - Each with unique mechanics and personality
+- **Dynamic Chaos System** - Visual effects intensify as chaos levels increase  
+- **Progress Persistence** - Your journey continues across sessions
+- **Persistent Timer** - Track your dedication (survives F5!)
+
+### 🖥️ Retro Aesthetics
+- **Authentic CRT Effects** - Scanlines, phosphor glow, and screen curves
+- **Glitch Mechanics** - Screen tears, color shifts, and element shakes
+- **Theme Variations** - Watch as reality breaks down around you
+- **Terminal Interface** - Command-line access for the l33t hackers
+
+### 🆘 Emergency Features
+- **Panic Menu** (ESC) - When the chaos becomes too much
+- **Quick Calm** (Ctrl+Shift+C) - Temporary relief from the madness
+- **Emergency Reset** (Ctrl+Shift+R) - Start fresh when all hope is lost
+- **Easter Eggs** - Hidden secrets for the curious
+
+<div align="center">
+  <img src="Screenshots/terminal.png" alt="CRT Chaos Terminal Interface" width="80%">
+  <p><em>Access the terminal for advanced debugging capabilities</em></p>
+</div>
+
+## 🧩 The Malfunctioning Systems
+
+<table>
+<tr>
+<td width="50%">
+
+### 🤖 AI Gone Wrong
+**1. Sentient Terminal** `>_`  
+*A terminal with feelings and attitude problems*  
+💡 Try kindness and respect
+
+**2. Paranoid Password** 🔐  
+*Login system convinced you're a spy*  
+💡 Prove you're not a threat
+
+</td>
+<td width="50%">
+
+### ⏰ Reality Glitches
+**3. Time-Traveling Clock** ⏰  
+*Temporal anomalies across timelines*  
+💡 Synchronize the chaos
+
+**4. Drunk Navigation** 🍺  
+*Menu items under the influence*  
+💡 Find sobriety in the madness
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🌐 Digital Madness
+**5. Conspiracy Search** 👁️  
+*Search engine knows too much*  
+💡 Seek the ultimate answer
+
+**6. Existential Error** ❓  
+*404 page questioning its existence*  
+💡 Provide existential comfort
+
+</td>
+<td width="50%">
+
+### 🎭 Communication Breakdown
+**7. Mime Modal** 🤐  
+*Silent but expressive popup*  
+💡 Master the art of gestures
+
+**8. Recursive Iframe Maze** 🌀  
+*Nested dimensions of confusion*  
+💡 Navigate the portal sequence
+
+</td>
+</tr>
+</table>
+
+> **⚠️ SPOILER WARNING**: Detailed solutions available in the terminal using `hint [puzzle-id]`
 
 ## 🎯 How to Play
 
@@ -73,30 +133,41 @@ CRT CHAOS is an immersive web experience where you're tasked with debugging a ma
 - Click outside modals to close them
 - **Konami Code** - ↑ ↑ ↓ ↓ ← → ← → B A (Dev mode)
 
-## 💻 Installation
+## ⚠️ Known Issues & Help Wanted
 
-### Requirements
-- Modern web browser (Chrome, Firefox, Edge, Safari)
-- Python 3.x (for local server)
-- Desktop/laptop recommended (mobile support limited)
+### 🔊 Audio System (Help Needed!)
+- **Current Status**: Audio files load successfully but playback fails
+- **Issue**: WAV files (4KB-88KB) are valid but no sound is produced
+- **Affected Features**: All sound effects (glitch, error, success, typing, beep)
+- **Workaround**: Game is fully playable without audio
+- **See**: `AUDIO_ISSUES.md` for technical details
 
-### Setup
+**We need help!** If you're experienced with Web Audio API or HTML5 audio:
+- The audio manager is in `js/audio-manager-simple.js`
+- Sound files are in `assets/sounds/`
+- Audio controls have been temporarily disabled
+- Please submit a PR if you can fix the playback issues!
 
-1. Clone the repository:
+## 🚀 Quick Start
+
+### 🎮 Play Online
+**[➡️ PLAY NOW - LIVE DEMO](https://YOUR-SITE-HERE.com)** *(Replace with your actual URL)*
+
+### 💻 Run Locally
+
 ```bash
+# Clone the chaos
 git clone https://github.com/VonHoltenCodes/crt-chaos.git
 cd crt-chaos
-```
 
-2. Start the local server:
-```bash
+# Start the madness
 python -m http.server 8000
+
+# Enter the chaos
+# Open http://localhost:8000 in your browser
 ```
 
-3. Open in browser:
-```
-http://localhost:8000
-```
+**Requirements**: Modern browser + Python 3.x + Strong nerves 💪
 
 ## 🏗️ Project Structure
 
@@ -200,6 +271,11 @@ class PuzzleName extends Puzzle {
 4. Push to branch (`git push origin feature/NewPuzzle`)
 5. Open Pull Request
 
+### Priority Help Needed
+- **Audio System Fix**: The game's sound effects don't play. See the Audio System section above.
+- **Mobile Optimization**: Improve mobile experience and touch controls
+- **New Puzzle Ideas**: Creative challenges that fit the chaos theme
+
 ### Adding New Puzzles
 1. Create puzzle class in `js/puzzles/`
 2. Extend base puzzle structure
@@ -210,19 +286,90 @@ class PuzzleName extends Puzzle {
 
 MIT License - see LICENSE file for details
 
+## 🏆 Achievements & Challenges
+
+### 🎯 Can You Beat These?
+- **Speed Runner** - Complete all puzzles in under 10 minutes
+- **Chaos Master** - Solve puzzles at maximum chaos level
+- **No Hints** - Complete without using terminal hints
+- **Persistence Award** - Keep trying the drunk navigation 50+ times
+- **Easter Egg Hunter** - Find all hidden features
+
+### 🔥 Hardest Puzzles (Community Voted)
+1. 🥇 **Drunk Navigation** - *"Those mirages got me every time!"*
+2. 🥈 **Recursive Iframe Maze** - *"I got lost in my own recursion"*
+3. 🥉 **Time-Traveling Clock** - *"What timeline am I even in?"*
+
+## 🛠️ Technical Highlights
+
+```javascript
+// Pure vanilla JavaScript - no frameworks needed!
+const chaos = new ChaosEngine();
+chaos.level = 11; // Yes, it goes to 11
+chaos.unleash(); // May the odds be ever in your favor
+```
+
+### 🎨 Built With
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript ES6+
+- **Effects**: Custom CSS animations & transforms
+- **Storage**: LocalStorage for progress persistence  
+- **Styling**: Retro CRT aesthetic with modern techniques
+- **Framework**: None. We like to live dangerously. 😎
+
+## 👥 Community & Support
+
+### 🤝 Join the Chaos
+- **Star** this repo if you survived the experience
+- **Fork** to create your own puzzles
+- **Share** your completion times and screenshots
+- **Contribute** new puzzle ideas or improvements
+
+### 📊 Stats
+- **Lines of Code**: ~5,000 of pure chaos
+- **Puzzles**: 8 unique brain-melters
+- **Glitch Effects**: 20+ different types
+- **Sanity Lost**: Immeasurable
+
 ## 🎭 Credits
 
-- **Design & Development**: VonHoltenCodes
-- **Inspiration**: Old CRT monitors, system errors, and escape rooms
-- **Built**: With a gun to my head (2025)
+<div align="center">
 
-## 🔗 Links
+**Created by [VonHoltenCodes](https://github.com/VonHoltenCodes)**  
+*"Built with love, frustration, and too much caffeine"*
 
-- [GitHub Repository](https://github.com/VonHoltenCodes)
-- [Report Issues](https://github.com/VonHoltenCodes/crt-chaos/issues)
+Special thanks to:
+- Old CRT monitors for the aesthetic inspiration
+- Error messages for the personality quirks
+- Escape rooms for the puzzle philosophy
+- The number 42 for being the answer
+
+</div>
+
+## 📜 License
+
+MIT License - Because chaos should be free! See [LICENSE](LICENSE) for details.
 
 ---
 
-**WARNING**: This system is intentionally unstable. Side effects may include: temporal displacement, existential dread, and uncontrollable laughter. The frustration is the feature.
+<div align="center">
 
-*Remember: When in doubt, press ESC to panic.*
+### ⚠️ FINAL WARNING ⚠️
+
+**This system is intentionally unstable.**  
+Side effects may include:
+- Temporal displacement
+- Existential dread  
+- Uncontrollable laughter
+- Sudden urge to debug everything
+
+**The frustration is the feature.™**
+
+<br>
+
+<h3>🚨 REMEMBER: When in doubt, press ESC to panic! 🚨</h3>
+
+<br>
+
+[![Play Now](https://img.shields.io/badge/🎮_ENTER_THE_CHAOS-PLAY_NOW-00ff00?style=for-the-badge&labelColor=000000)](https://YOUR-SITE-HERE.com)
+
+</div>

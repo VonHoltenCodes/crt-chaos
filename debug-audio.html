@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Debug - Direct Test</title>
+    <style>
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+        }
+        button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #111;
+            color: #0f0;
+            border: 1px solid #0f0;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+        .log {
+            background: #111;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #333;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .success { color: #0f0; }
+        .error { color: #f00; }
+        .info { color: #fff; }
+        .warning { color: #ff0; }
+    </style>
+</head>
+<body>
+    <h1>Direct Audio Debug Test</h1>
+    
+    <div>
+        <h2>Step 1: Test Basic Audio Support</h2>
+        <button onclick="testBasicAudio()">Test Basic Audio</button>
+        
+        <h2>Step 2: Test with Data URL (No File Loading)</h2>
+        <button onclick="testDataUrlAudio()">Test Data URL Audio</button>
+        
+        <h2>Step 3: Test Local Files</h2>
+        <button onclick="testLocalFile('assets/sounds/beep.mp3')">Test beep.mp3</button>
+        <button onclick="testLocalFile('assets/sounds/beep_real.wav')">Test beep_real.wav</button>
+        
+        <h2>Step 4: Create and Play Tone</h2>
+        <button onclick="playTone()">Play Generated Tone (Web Audio API)</button>
+        
+        <h2>Step 5: Check Audio Context State</h2>
+        <button onclick="checkAudioContext()">Check Audio Context</button>
+    </div>
+    
+    <div class="log" id="log"></div>
+    
+    <script>
+        function log(msg, type = 'info') {
+            const logEl = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logEl.innerHTML += `<div class="${type}">[${time}] ${msg}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${msg}`);
+        }
+        
+        // Test 1: Basic Audio Support
+        function testBasicAudio() {
+            log('Testing basic audio support...', 'info');
+            
+            const audio = document.createElement('audio');
+            log(`Audio element created: ${audio.constructor.name}`, 'info');
+            
+            // Check supported types
+            const types = [
+                'audio/mp3',
+                'audio/mpeg',
+                'audio/wav',
+                'audio/ogg',
+                'audio/webm'
+            ];
+            
+            types.forEach(type => {
+                const support = audio.canPlayType(type);
+                if (support) {
+                    log(`${type}: ${support}`, 'success');
+                } else {
+                    log(`${type}: not supported`, 'error');
+                }
+            });
+            
+            // Check audio properties
+            log(`Volume: ${audio.volume}`, 'info');
+            log(`Muted: ${audio.muted}`, 'info');
+            log(`Autoplay: ${audio.autoplay}`, 'info');
+        }
+        
+        // Test 2: Data URL Audio (no external file needed)
+        function testDataUrlAudio() {
+            log('Testing audio with data URL...', 'info');
+            
+            // This is a very short beep sound as a data URL
+            const dataUrl = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarp7blmFgU7k9n1unEiBC13yO7eizEIHWq+8+OWT' + 
+                              'AsOUqzq6LVjFAU+ltryxXkpBCtxyO3jkEALFGS57OmqWw8ESZzh8sNuIAUme8zz5nwwBBxywOvrnFQKCVOo5e21aRcGO5HY9Ll0KgQiccvt45JHCxJlturqsF4QB0CY3/PGdCQELHfP8dx+OAcZZ7zz6Z5SDAVYqevsumMWBT2W2vK8cysEI3PH8t+NPwcYZ7zv5ZlQCwlUqOXstmcZBjiP1/O+diMGK3vP8+F+OAYVaLvt4JVKCAVYquntul0aBDua2/LGcCEEJHbJ8NyKQwUVY7rs56pUDAdJltzy0H4lBS9+0vLWgC0HG2y67eSVRwwGVqfn77ZiGAc0' + 
+                              'kdn2yHkjBSh+zfDYgjQGGGu98OWbTwgJU6zr6rJcGAU9mNn0v3gkBSl+zfDWgjQHF2m98OScTgoCVKnn7bllGQY3j9n1unYqBC16yu7cgz8HHWq+8+OWT' + 
+                              'QwLUqvm67tsFgc1kNb0xHksBSh+zfDYgjQGHWq+8+OWTwwFUqvm67ttFwU3kNf0w3ouBSV8y/HWhy4GGGu98OWbUg0JUqPq6rVnHQg2j9XwvXcvBCd+zfDYgzYHFWi77eSXSQ0JUqPq6rVnHAU7ktXwvXcuBypwyO3kkUcKElyk4+22bR0FN5bZ77t1KwUxd8XwyHw2BSJvyfPclEwNBlin5+21axwFOJPa8r9zKwUwd8Xxw3w7BClpxfPelEwNBlin5+21axwFOJPa8r9zKwUwd8Xxw3w7BClpxfPelEwNBlin5+21axwFOJPa8r9zKwUwd8Xxw3w7BClpxfPelEwNBlin5+21ahkEL5HY9cF5JwUvdcfyxn48BipnwvDelE4LAlOm5Ou4Zh4FNpLX9b91KAYydsnvy3g5BChqxfDilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRkFN5DU9cB3KwYydsnvy3g5BCh6w/DilUkLDFKv4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY1BSxsw/DjlksMClSp4+y3aRgGOpXX9bx0KAYzeMvvyHY2Ayd0yfPjm0gJDVWr6+u1ZhgGOpXX9cB3KgY0dcruyHc2Ayd0yfPjm0gJDVWr6+u1ZhgGOpXX9cB3KgY0dcruyHc2Ayd0yfPjm0gJDVWr6+u1ZhgGOpXX9cB3KgY0dcruyHc2Ayd0yfPjm0gJDVWr6+u1ZhgGOpXX9cB3KgY0dcruyHc2Ayd0yfPjm0gJDVWr6+u1ZhgGOpXW88R0LgUxeMjt13s4Byp1yu7gmEUJC1aq7O23Yx4IMJbS9cl2LwUsd8Tt1HkzCC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2MAUsd8Tt1Hk0CC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2MAUsd8Tt1Hk0CC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2MAUsd8Tt1Hk0CC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2MAUsd8Tt1Hk0CC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2MAUsd8Tt1Hk0CC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2MAUsd8Tt1Hk0CC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2MAUsd8Tt1Hk0CC5qyvHglEoNDlOj6+O4Zx0FMpHS9cp2L'
+
+            try {
+                const audio = new Audio(dataUrl);
+                audio.volume = 0.5;
+                
+                audio.addEventListener('canplay', () => {
+                    log('Data URL audio can play!', 'success');
+                });
+                
+                audio.addEventListener('error', (e) => {
+                    log(`Data URL audio error: ${e.type}`, 'error');
+                });
+                
+                audio.play()
+                    .then(() => {
+                        log('Data URL audio playing successfully!', 'success');
+                    })
+                    .catch(err => {
+                        log(`Data URL audio play failed: ${err.name} - ${err.message}`, 'error');
+                        if (err.name === 'NotAllowedError') {
+                            log('Click anywhere on the page first to enable audio', 'warning');
+                        }
+                    });
+                    
+            } catch (e) {
+                log(`Failed to create audio: ${e.message}`, 'error');
+            }
+        }
+        
+        // Test 3: Local File
+        function testLocalFile(path) {
+            log(`Testing local file: ${path}`, 'info');
+            
+            const audio = new Audio();
+            
+            // Set up all event listeners before setting src
+            audio.addEventListener('loadstart', () => log('Load started', 'info'));
+            audio.addEventListener('loadedmetadata', () => log(`Metadata loaded - duration: ${audio.duration}s`, 'info'));
+            audio.addEventListener('canplay', () => log('Can play!', 'success'));
+            audio.addEventListener('canplaythrough', () => log('Can play through!', 'success'));
+            
+            audio.addEventListener('error', (e) => {
+                log(`Error event: ${e.type}`, 'error');
+                if (audio.error) {
+                    const errorTypes = {
+                        1: 'MEDIA_ERR_ABORTED',
+                        2: 'MEDIA_ERR_NETWORK',
+                        3: 'MEDIA_ERR_DECODE',
+                        4: 'MEDIA_ERR_SRC_NOT_SUPPORTED'
+                    };
+                    log(`Media error: ${errorTypes[audio.error.code] || audio.error.code}`, 'error');
+                    log(`Error message: ${audio.error.message || 'No message'}`, 'error');
+                }
+                
+                // Check network state
+                const networkStates = {
+                    0: 'NETWORK_EMPTY',
+                    1: 'NETWORK_IDLE',
+                    2: 'NETWORK_LOADING',
+                    3: 'NETWORK_NO_SOURCE'
+                };
+                log(`Network state: ${networkStates[audio.networkState]}`, 'info');
+            });
+            
+            // Try to get more info about the file
+            fetch(path)
+                .then(response => {
+                    log(`Fetch response: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+                    log(`Content-Type: ${response.headers.get('Content-Type')}`, 'info');
+                    return response.blob();
+                })
+                .then(blob => {
+                    log(`File size: ${blob.size} bytes`, 'info');
+                    
+                    // Try playing from blob URL
+                    const blobUrl = URL.createObjectURL(blob);
+                    audio.src = blobUrl;
+                    audio.volume = 0.5;
+                    
+                    return audio.play();
+                })
+                .then(() => {
+                    log('Audio playing from blob URL!', 'success');
+                })
+                .catch(err => {
+                    log(`Error: ${err.name} - ${err.message}`, 'error');
+                });
+        }
+        
+        // Test 4: Web Audio API Tone
+        function playTone() {
+            log('Testing Web Audio API...', 'info');
+            
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                log(`Audio context created. State: ${audioContext.state}`, 'info');
+                
+                // Create oscillator
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 440; // A4 note
+                gainNode.gain.value = 0.3;
+                
+                oscillator.start();
+                log('Tone started (440Hz for 1 second)', 'success');
+                
+                setTimeout(() => {
+                    oscillator.stop();
+                    log('Tone stopped', 'info');
+                }, 1000);
+                
+            } catch (e) {
+                log(`Web Audio API error: ${e.message}`, 'error');
+            }
+        }
+        
+        // Test 5: Check Audio Context
+        function checkAudioContext() {
+            log('Checking Audio Context...', 'info');
+            
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                log(`Audio Context State: ${audioContext.state}`, audioContext.state === 'running' ? 'success' : 'warning');
+                log(`Sample Rate: ${audioContext.sampleRate}Hz`, 'info');
+                log(`Output Latency: ${audioContext.outputLatency || 'Not available'}`, 'info');
+                log(`Base Latency: ${audioContext.baseLatency || 'Not available'}`, 'info');
+                
+                if (audioContext.state === 'suspended') {
+                    log('Audio context is suspended. Trying to resume...', 'warning');
+                    audioContext.resume().then(() => {
+                        log('Audio context resumed!', 'success');
+                    }).catch(err => {
+                        log(`Failed to resume: ${err.message}`, 'error');
+                    });
+                }
+            } catch (e) {
+                log(`Failed to create Audio Context: ${e.message}`, 'error');
+            }
+        }
+        
+        // Auto-run basic test
+        window.addEventListener('load', () => {
+            log('Page loaded. Click any button to start testing.', 'info');
+            log('Make sure to click somewhere on the page first to enable audio (browser requirement)', 'warning');
+        });
+        
+        // Enable audio on first click
+        let clicked = false;
+        document.addEventListener('click', () => {
+            if (!clicked) {
+                clicked = true;
+                log('User interaction detected - audio should now be enabled', 'success');
+            }
+        });
+    </script>
+</body>
+</html>

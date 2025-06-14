@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; frame-src 'self';">
     <meta name="referrer" content="no-referrer-when-downgrade">
     
     <!-- SEO Meta Tags -->
@@ -256,7 +256,7 @@
     <div class="chaos-meter" id="chaos-meter">
         <div>Chaos Level</div>
         <div class="chaos-meter-bar">
-            <div class="chaos-meter-fill" id="chaos-meter-fill" style="width: 70%"></div>
+            <div class="chaos-meter-fill" id="chaos-meter-fill" style="width: 30%"></div>
         </div>
     </div>
 
@@ -264,6 +264,7 @@
     <div id="puzzle-modals"></div>
 
     <!-- JavaScript Files -->
+    <script src="js/audio-manager-simple.js"></script>
     <script src="js/chaos-core.js"></script>
     <script src="js/main.js"></script>
     <script src="js/back-to-top.js"></script>
@@ -277,6 +278,9 @@
     <script src="js/puzzles/existential-error.js"></script>
     <script src="js/puzzles/mime-modal.js"></script>
     <script src="js/puzzles/iframe-maze.js"></script>
+    
+    <!-- Puzzle initialization helper -->
+    <script src="js/puzzle-init.js"></script>
 
     <script>
         // Mobile detection
@@ -284,17 +288,37 @@
             document.getElementById('mobile-warning').style.display = 'flex';
         }
         
-        // Start timer
-        const startTime = Date.now();
-        setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            const minutes = Math.floor(elapsed / 60000);
-            const seconds = Math.floor((elapsed % 60000) / 1000);
-            const timeElement = document.getElementById('time-elapsed');
-            if (timeElement) {
-                timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        // Persistent timer that survives page reloads
+        function initPersistentTimer() {
+            // Check if we have a stored start time
+            let startTime = localStorage.getItem('crt-chaos-start-time');
+            
+            if (!startTime) {
+                // First time playing - set the start time
+                startTime = Date.now();
+                localStorage.setItem('crt-chaos-start-time', startTime);
+            } else {
+                // Convert stored string back to number
+                startTime = parseInt(startTime);
             }
-        }, 1000);
+            
+            // Update timer every second
+            setInterval(() => {
+                const now = Date.now();
+                const elapsed = now - startTime;
+                const minutes = Math.floor(elapsed / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                const timeElement = document.getElementById('time-elapsed');
+                if (timeElement) {
+                    timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+            
+            return startTime;
+        }
+        
+        // Initialize the persistent timer
+        const gameStartTime = initPersistentTimer();
 
         function proceedAnyway() {
             document.getElementById('mobile-warning').style.display = 'none';
@@ -345,6 +369,7 @@
             });
         });
 
+        
         function initializeDiagnostics() {
             window.chaos.showNotification('RUNNING SYSTEM DIAGNOSTICS...', 'system');
             
@@ -400,6 +425,13 @@ RECOMMENDATION: Access failed systems to restore stability.`;
                     output.innerHTML += `<p>CHAOS LEVEL: ${window.chaos.chaosLevel}/10</p>`;
                     output.innerHTML += `<p>SOLVED PUZZLES: ${window.chaos.solvedPuzzles.size}/${puzzles.length}</p>`;
                     output.innerHTML += `<p>STABILITY: ${Math.round((1 - window.chaos.chaosLevel / 10) * 100)}%</p>`;
+                    // Calculate and show play time
+                    const startTime = parseInt(localStorage.getItem('crt-chaos-start-time') || Date.now());
+                    const elapsed = Date.now() - startTime;
+                    const hours = Math.floor(elapsed / 3600000);
+                    const minutes = Math.floor((elapsed % 3600000) / 60000);
+                    const seconds = Math.floor((elapsed % 60000) / 1000);
+                    output.innerHTML += `<p>PLAY TIME: ${hours > 0 ? hours + 'h ' : ''}${minutes}m ${seconds}s</p>`;
                     const unsolved = puzzles.filter(p => !window.chaos.solvedPuzzles.has(p.id));
                     if (unsolved.length > 0) {
                         output.innerHTML += `<p style="color: #ff0000">FAILED SYSTEMS: ${unsolved.map(p => p.name).join(', ')}</p>`;
@@ -624,6 +656,11 @@ RECOMMENDATION: Access failed systems to restore stability.`;
         function loadPuzzle(puzzleId) {
             console.log('loadPuzzle function in index.html called with:', puzzleId);
             window.chaos.showNotification(`Loading ${puzzleId}...`);
+            
+            // Try to force initialize puzzles if needed
+            if (window.forceInitializePuzzles) {
+                window.forceInitializePuzzles();
+            }
             
             // Direct activation based on puzzle ID
             switch(puzzleId) {

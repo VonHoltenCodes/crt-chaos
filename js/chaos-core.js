@@ -4,7 +4,7 @@
  */
 
 // Debug mode - set to false for production
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 // Safe console wrapper
 const safeConsole = {
@@ -15,7 +15,7 @@ const safeConsole = {
 
 class ChaosEngine {
     constructor() {
-        this.chaosLevel = 1; // 0-10 scale
+        this.chaosLevel = 3; // 0-10 scale - starting with some chaos!
         this.maxChaos = 10;
         this.activePuzzles = new Map();
         this.solvedPuzzles = new Set();
@@ -45,6 +45,14 @@ class ChaosEngine {
             this.startChaos();
             this.initializeAudio();
             
+            // Update chaos meter to correct initial value
+            const fillElement = document.getElementById('chaos-meter-fill');
+            if (fillElement) {
+                const fillPercent = (this.chaosLevel / 10) * 100;
+                fillElement.style.width = fillPercent + '%';
+                console.log(`[CHAOS DEBUG] Initial chaos meter set to ${fillPercent}% (chaos level: ${this.chaosLevel})`);
+            }
+            
             safeConsole.log('%c CRT CHAOS INITIALIZED ', 'background: #00ff00; color: #000; font-size: 20px;');
             safeConsole.log('%c Chaos Level: ' + this.chaosLevel, 'color: #00ff00;');
         } catch (error) {
@@ -72,7 +80,7 @@ class ChaosEngine {
     
     scheduleRandomGlitch() {
         // More chaos = more frequent glitches
-        const delay = Math.random() * (10000 / this.chaosLevel) + 2000;
+        const delay = Math.random() * (10000 / Math.max(1, this.chaosLevel)) + 1000;
         
         const timer = setTimeout(() => {
             this.triggerRandomGlitch();
@@ -93,8 +101,18 @@ class ChaosEngine {
             () => this.elementShake()
         ];
         
-        const randomGlitch = glitchTypes[Math.floor(Math.random() * glitchTypes.length)];
-        randomGlitch();
+        // Higher chaos = multiple glitches at once!
+        const glitchCount = this.chaosLevel > 7 ? 3 : this.chaosLevel > 5 ? 2 : 1;
+        
+        for (let i = 0; i < glitchCount; i++) {
+            const randomGlitch = glitchTypes[Math.floor(Math.random() * glitchTypes.length)];
+            setTimeout(() => randomGlitch(), i * 100);
+        }
+        
+        // Play glitch sound
+        if (window.audioManager && window.audioManager.enabled) {
+            window.audioManager.playGlitch();
+        }
     }
     
     screenTear() {
@@ -235,10 +253,19 @@ class ChaosEngine {
     puzzleSolved(puzzleId) {
         if (this.solvedPuzzles.has(puzzleId)) return;
         
-        this.solvedPuzzles.add(puzzleId);
-        this.chaosLevel = Math.max(0, this.chaosLevel - 1.5);
+        console.log(`[CHAOS DEBUG] Puzzle solved: ${puzzleId}`);
+        console.log(`[CHAOS DEBUG] Chaos level BEFORE: ${this.chaosLevel}`);
         
-        this.playSound('success');
+        this.solvedPuzzles.add(puzzleId);
+        const oldChaos = this.chaosLevel;
+        this.chaosLevel = Math.max(1, this.chaosLevel - 1); // Never go below 1 until all puzzles solved
+        
+        console.log(`[CHAOS DEBUG] Chaos level AFTER: ${this.chaosLevel} (reduced by ${oldChaos - this.chaosLevel})`);
+        
+        // Play success sound
+        if (window.audioManager && window.audioManager.enabled) {
+            window.audioManager.playSuccess();
+        }
         this.showNotification(`SYSTEM STABILIZED: ${puzzleId}`);
         
         // Save progress
@@ -246,6 +273,7 @@ class ChaosEngine {
         
         // Check if all puzzles solved
         if (this.solvedPuzzles.size === this.activePuzzles.size && this.activePuzzles.size > 0) {
+            console.log(`[CHAOS DEBUG] All puzzles solved! Calling victory()`);
             this.victory();
         }
         
@@ -253,7 +281,20 @@ class ChaosEngine {
     }
     
     increaseChaos(amount = 0.5) {
+        const oldChaos = this.chaosLevel;
         this.chaosLevel = Math.min(this.maxChaos, this.chaosLevel + amount);
+        
+        console.log(`[CHAOS DEBUG] Chaos INCREASED from ${oldChaos} to ${this.chaosLevel} (amount: ${amount})`);
+        console.trace('[CHAOS DEBUG] Stack trace for chaos increase');
+        
+        // More chaos = more glitches!
+        if (this.chaosLevel > 5) {
+            this.startScreenFlicker();
+        }
+        if (this.chaosLevel > 7) {
+            this.scheduleThemeSwitches();
+        }
+        
         safeConsole.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #ff0000;');
     }
     
@@ -273,14 +314,15 @@ class ChaosEngine {
         if (saved) {
             const progress = JSON.parse(saved);
             this.solvedPuzzles = new Set(progress.solvedPuzzles);
-            this.chaosLevel = progress.chaosLevel || 1;
+            this.chaosLevel = Math.max(3, progress.chaosLevel || 3); // Always start with some chaos
         }
     }
     
     resetProgress() {
         localStorage.removeItem('crt-chaos-progress');
+        localStorage.removeItem('crt-chaos-start-time'); // Reset timer too
         this.solvedPuzzles.clear();
-        this.chaosLevel = 1;
+        this.chaosLevel = 3; // Start with chaos!
         location.reload();
     }
     
@@ -304,13 +346,20 @@ class ChaosEngine {
     
     // Audio
     initializeAudio() {
-        // Skip audio preloading for now since we don't have sound files yet
-        safeConsole.log('Audio initialization skipped (no sound files yet)');
+        // Initialize audio manager if available
+        if (window.audioManager) {
+            window.audioManager.init();
+            safeConsole.log('Audio manager initialized');
+        } else {
+            safeConsole.log('Audio manager not found - sounds will be disabled');
+        }
     }
     
     playSound(soundName) {
-        // Disabled until we add sound files
-        return;
+        // Use audio manager if available
+        if (window.audioManager) {
+            window.audioManager.play(soundName);
+        }
     }
     
     // Victory condition
@@ -436,9 +485,10 @@ class ChaosEngine {
     }
     
     calmDown() {
-        // Reduce chaos level significantly
-        this.chaosLevel = Math.max(1, this.chaosLevel - 3);
-        this.showNotification('Taking deep breaths... Chaos reduced', 'success');
+        // Reduce chaos level but not too much - this is CHAOS after all!
+        this.chaosLevel = Math.max(2, this.chaosLevel - 1.5);
+        this.showNotification('Taking deep breaths... Chaos reduced slightly', 'success');
+        this.showNotification('But the chaos never truly stops...', 'warning');
         
         // Stop current glitches
         this.stopAllGlitches();
@@ -447,6 +497,12 @@ class ChaosEngine {
         document.body.style.filter = '';
         document.body.style.transform = '';
         document.body.style.opacity = '1';
+        
+        // But immediately start causing trouble again!
+        setTimeout(() => {
+            this.showNotification('The chaos returns...', 'error');
+            this.scheduleRandomGlitch();
+        }, 3000);
         
         safeConsole.log(`%c Chaos Level: ${this.chaosLevel}`, 'color: #00ff00;');
     }
@@ -515,7 +571,7 @@ class ChaosEngine {
             this.glitchTimers.forEach(timer => clearTimeout(timer));
             
             // Reset all values
-            this.chaosLevel = 1;
+            this.chaosLevel = 3; // Even emergency reset starts with chaos!
             this.solvedPuzzles.clear();
             this.currentTheme = 'normal';
             

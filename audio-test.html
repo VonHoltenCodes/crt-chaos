@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test - CRT Chaos</title>
+    <style>
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        .audio-test {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #0f0;
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #0f0;
+            color: #0f0;
+            cursor: pointer;
+            font-family: monospace;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+        
+        .log {
+            background: #111;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 12px;
+        }
+        
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 0, 0.1);
+            border: 1px solid #ff0;
+        }
+        
+        .control {
+            margin: 10px 0;
+        }
+        
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+        
+        input[type="range"] {
+            width: 200px;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔊 CRT CHAOS - Audio System Test 🔊</h1>
+    
+    <div class="audio-test">
+        <h2>Direct Audio Test (No Manager)</h2>
+        <div class="test-buttons" id="direct-test">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="audio-test">
+        <h2>Audio Manager Test</h2>
+        <div class="status" id="manager-status">Loading audio manager...</div>
+        
+        <div class="control">
+            <label>
+                <input type="checkbox" id="audio-enabled" checked> Audio Enabled
+            </label>
+        </div>
+        
+        <div class="control">
+            <label>Volume:</label>
+            <input type="range" id="volume-slider" min="0" max="100" value="50">
+            <span id="volume-value">50%</span>
+        </div>
+        
+        <div class="test-buttons" id="manager-test">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="audio-test">
+        <h2>Debug Log</h2>
+        <div class="log" id="debug-log"></div>
+    </div>
+    
+    <script>
+        // Simple log function
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('debug-log');
+            const time = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f00' : type === 'success' ? '#0f0' : '#fff';
+            logDiv.innerHTML += `<span style="color: ${color}">[${time}] ${message}</span>\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[AUDIO TEST] ${message}`);
+        }
+        
+        // Test sound files
+        const soundFiles = {
+            glitch: 'assets/sounds/glitch_real.wav',
+            error: 'assets/sounds/error_real.wav',
+            success: 'assets/sounds/success_real.wav',
+            typing: 'assets/sounds/typing_real.wav',
+            beep: 'assets/sounds/beep_real.wav',
+            powerOn: 'assets/sounds/power-on_real.wav',
+            powerOff: 'assets/sounds/power-off_real.wav',
+            static: 'assets/sounds/static_real.wav'
+        };
+        
+        // Direct audio test (without manager)
+        function setupDirectTest() {
+            const container = document.getElementById('direct-test');
+            
+            Object.entries(soundFiles).forEach(([name, path]) => {
+                const button = document.createElement('button');
+                button.textContent = `Play ${name}`;
+                button.onclick = () => playDirectAudio(name, path);
+                container.appendChild(button);
+            });
+        }
+        
+        function playDirectAudio(name, path) {
+            log(`Playing ${name} directly from ${path}`);
+            
+            const audio = new Audio(path);
+            audio.volume = 0.5;
+            
+            audio.addEventListener('loadstart', () => log(`Loading ${name}...`));
+            audio.addEventListener('canplay', () => log(`${name} ready to play`, 'success'));
+            audio.addEventListener('error', (e) => {
+                log(`Error loading ${name}: ${e.type}`, 'error');
+                log(`Audio error code: ${audio.error?.code}, message: ${audio.error?.message}`, 'error');
+            });
+            
+            audio.play()
+                .then(() => {
+                    log(`${name} playing successfully!`, 'success');
+                })
+                .catch(err => {
+                    log(`Failed to play ${name}: ${err.message}`, 'error');
+                    
+                    // Try to provide helpful error messages
+                    if (err.name === 'NotAllowedError') {
+                        log('Browser autoplay policy blocked playback. Click anywhere on the page first.', 'error');
+                    } else if (err.name === 'NotSupportedError') {
+                        log('Audio format not supported by browser', 'error');
+                    }
+                });
+        }
+        
+        // Audio Manager test
+        function setupManagerTest() {
+            // Load the audio manager
+            const script = document.createElement('script');
+            script.src = 'js/audio-manager.js';
+            script.onload = () => {
+                log('Audio manager loaded');
+                initializeManagerTest();
+            };
+            script.onerror = () => {
+                log('Failed to load audio manager', 'error');
+            };
+            document.head.appendChild(script);
+        }
+        
+        function initializeManagerTest() {
+            if (!window.audioManager) {
+                log('Audio manager not found!', 'error');
+                return;
+            }
+            
+            // Initialize audio manager
+            window.audioManager.init();
+            log('Audio manager initialized');
+            
+            // Update status
+            document.getElementById('manager-status').textContent = 
+                `Audio Manager: ${window.audioManager.initialized ? 'Initialized' : 'Not initialized'} | ` +
+                `Enabled: ${window.audioManager.enabled} | ` +
+                `Volume: ${Math.round(window.audioManager.volume * 100)}%`;
+            
+            // Setup controls
+            document.getElementById('audio-enabled').onchange = (e) => {
+                window.audioManager.enabled = e.target.checked;
+                log(`Audio ${e.target.checked ? 'enabled' : 'disabled'}`);
+                updateManagerStatus();
+            };
+            
+            document.getElementById('volume-slider').oninput = (e) => {
+                const volume = e.target.value / 100;
+                window.audioManager.setVolume(volume);
+                document.getElementById('volume-value').textContent = e.target.value + '%';
+                log(`Volume set to ${e.target.value}%`);
+                updateManagerStatus();
+            };
+            
+            // Create test buttons
+            const container = document.getElementById('manager-test');
+            
+            // Standard play buttons
+            const sounds = ['glitch', 'error', 'success', 'typing', 'beep'];
+            sounds.forEach(sound => {
+                const button = document.createElement('button');
+                button.textContent = `Play ${sound}`;
+                button.onclick = () => {
+                    log(`Calling audioManager.play('${sound}')`);
+                    window.audioManager.play(sound);
+                };
+                container.appendChild(button);
+            });
+            
+            // Special method buttons
+            const specialButton = document.createElement('button');
+            specialButton.textContent = 'Play Glitch Effect';
+            specialButton.onclick = () => {
+                log('Calling audioManager.playGlitch()');
+                window.audioManager.playGlitch();
+            };
+            container.appendChild(specialButton);
+        }
+        
+        function updateManagerStatus() {
+            document.getElementById('manager-status').textContent = 
+                `Audio Manager: ${window.audioManager.initialized ? 'Initialized' : 'Not initialized'} | ` +
+                `Enabled: ${window.audioManager.enabled} | ` +
+                `Volume: ${Math.round(window.audioManager.volume * 100)}%`;
+        }
+        
+        // Click to enable audio (for autoplay policy)
+        let audioEnabled = false;
+        document.addEventListener('click', () => {
+            if (!audioEnabled) {
+                audioEnabled = true;
+                log('User interaction detected - audio should now work', 'success');
+            }
+        });
+        
+        // Initialize tests
+        log('Starting audio system test...');
+        setupDirectTest();
+        setupManagerTest();
+        
+        // Test browser audio support
+        const audio = new Audio();
+        const canPlayWAV = audio.canPlayType('audio/wav');
+        const canPlayMP3 = audio.canPlayType('audio/mp3');
+        log(`Browser audio support - WAV: ${canPlayWAV || 'no'}, MP3: ${canPlayMP3 || 'no'}`);
+    </script>
+</body>
+</html>

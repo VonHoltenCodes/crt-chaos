@@ -448,7 +448,7 @@ class MimeModal {
 }
 
 // Initialize
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     safeConsole.log('Initializing Mime Modal...');
     window.mimeModal = new MimeModal();
     

@@ -426,7 +426,7 @@ class IframeMaze {
 }
 
 // Initialize
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     safeConsole.log('Initializing Iframe Maze...');
     window.iframeMaze = new IframeMaze();
     

@@ -1,0 +1,10 @@
+# Set correct MIME types for audio files
+AddType audio/mpeg mp3
+AddType audio/wav wav
+AddType audio/ogg ogg
+AddType audio/webm webm
+
+# Allow audio files to be loaded
+<FilesMatch "\.(mp3|wav|ogg|webm)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>

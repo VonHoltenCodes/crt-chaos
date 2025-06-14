@@ -416,7 +416,7 @@ class ParanoidPassword {
 }
 
 // Initialize when window loads
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     safeConsole.log('Window loaded, initializing Paranoid Password...');
     window.paranoidPassword = new ParanoidPassword();
     

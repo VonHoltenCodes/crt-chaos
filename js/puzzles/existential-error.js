@@ -457,7 +457,7 @@ class ExistentialError {
 }
 
 // Initialize
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     safeConsole.log('Initializing Existential Error...');
     window.existentialError = new ExistentialError();
     

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRT Chaos - Sound Generator</title>
+    <style>
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+        
+        .generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 2px solid #0f0;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+        
+        .sound-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #0f0;
+        }
+        
+        h2 {
+            color: #ff0;
+        }
+        
+        .info {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="generator">
+        <h1>CRT CHAOS - Sound Generator</h1>
+        
+        <div class="info">
+            <p>This page generates simple sound effects using the Web Audio API.</p>
+            <p>Click each button to play the sound. Right-click → "Save audio as..." to download.</p>
+            <p>Note: These are basic synthesized sounds. For better quality, use the free resources mentioned.</p>
+        </div>
+        
+        <div class="sound-section">
+            <h2>Glitch Sound</h2>
+            <button onclick="playGlitch()">Play Glitch</button>
+            <button onclick="downloadSound(createGlitch(), 'glitch.wav')">Download Glitch</button>
+        </div>
+        
+        <div class="sound-section">
+            <h2>Error Beep</h2>
+            <button onclick="playError()">Play Error</button>
+            <button onclick="downloadSound(createError(), 'error.wav')">Download Error</button>
+        </div>
+        
+        <div class="sound-section">
+            <h2>Success Chime</h2>
+            <button onclick="playSuccess()">Play Success</button>
+            <button onclick="downloadSound(createSuccess(), 'success.wav')">Download Success</button>
+        </div>
+        
+        <div class="sound-section">
+            <h2>Typing Sound</h2>
+            <button onclick="playTyping()">Play Typing</button>
+            <button onclick="downloadSound(createTyping(), 'typing.wav')">Download Typing</button>
+        </div>
+        
+        <div class="sound-section">
+            <h2>Beep</h2>
+            <button onclick="playBeep()">Play Beep</button>
+            <button onclick="downloadSound(createBeep(), 'beep.wav')">Download Beep</button>
+        </div>
+        
+        <div class="sound-section">
+            <h2>Static Noise</h2>
+            <button onclick="playStatic()">Play Static</button>
+            <button onclick="downloadSound(createStatic(), 'static.wav')">Download Static</button>
+        </div>
+    </div>
+
+    <script>
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Glitch sound - random frequencies and noise
+        function createGlitch() {
+            const duration = 0.2;
+            const sampleRate = audioContext.sampleRate;
+            const length = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            for (let i = 0; i < length; i++) {
+                if (i < length / 3) {
+                    // Low frequency buzz
+                    data[i] = Math.sin(2 * Math.PI * 80 * i / sampleRate) * 0.3;
+                } else if (i < 2 * length / 3) {
+                    // White noise
+                    data[i] = (Math.random() * 2 - 1) * 0.5;
+                } else {
+                    // High frequency
+                    data[i] = Math.sin(2 * Math.PI * 1200 * i / sampleRate) * 0.2;
+                }
+                
+                // Add random glitches
+                if (Math.random() > 0.9) {
+                    data[i] = (Math.random() * 2 - 1) * 0.8;
+                }
+            }
+            
+            return buffer;
+        }
+        
+        // Error beep - descending tones
+        function createError() {
+            const duration = 0.5;
+            const sampleRate = audioContext.sampleRate;
+            const length = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                const freq = 800 - (t * 400); // Descending from 800Hz to 400Hz
+                data[i] = Math.sin(2 * Math.PI * freq * t) * Math.exp(-t * 3) * 0.5;
+            }
+            
+            return buffer;
+        }
+        
+        // Success chime - ascending tones
+        function createSuccess() {
+            const duration = 0.6;
+            const sampleRate = audioContext.sampleRate;
+            const length = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+            
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                const noteIndex = Math.floor(t * 6);
+                if (noteIndex < notes.length) {
+                    const freq = notes[noteIndex];
+                    data[i] = Math.sin(2 * Math.PI * freq * t) * Math.exp(-t * 2) * 0.4;
+                }
+            }
+            
+            return buffer;
+        }
+        
+        // Typing sound - short click
+        function createTyping() {
+            const duration = 0.05;
+            const sampleRate = audioContext.sampleRate;
+            const length = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                // Mix of frequencies for mechanical click
+                data[i] = (
+                    Math.sin(2 * Math.PI * 3000 * t) * 0.1 +
+                    Math.sin(2 * Math.PI * 1500 * t) * 0.1 +
+                    (Math.random() * 2 - 1) * 0.1
+                ) * Math.exp(-t * 100);
+            }
+            
+            return buffer;
+        }
+        
+        // Simple beep
+        function createBeep() {
+            const duration = 0.1;
+            const sampleRate = audioContext.sampleRate;
+            const length = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                data[i] = Math.sin(2 * Math.PI * 1000 * t) * 0.3 * Math.exp(-t * 10);
+            }
+            
+            return buffer;
+        }
+        
+        // Static noise
+        function createStatic() {
+            const duration = 1.0;
+            const sampleRate = audioContext.sampleRate;
+            const length = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            for (let i = 0; i < length; i++) {
+                // White noise with occasional pops
+                data[i] = (Math.random() * 2 - 1) * 0.1;
+                if (Math.random() > 0.999) {
+                    data[i] = (Math.random() * 2 - 1) * 0.5;
+                }
+            }
+            
+            return buffer;
+        }
+        
+        // Play functions
+        function playSound(buffer) {
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioContext.destination);
+            source.start();
+        }
+        
+        function playGlitch() { playSound(createGlitch()); }
+        function playError() { playSound(createError()); }
+        function playSuccess() { playSound(createSuccess()); }
+        function playTyping() { playSound(createTyping()); }
+        function playBeep() { playSound(createBeep()); }
+        function playStatic() { playSound(createStatic()); }
+        
+        // Download function
+        function downloadSound(buffer, filename) {
+            const length = buffer.length;
+            const arrayBuffer = new ArrayBuffer(44 + length * 2);
+            const view = new DataView(arrayBuffer);
+            
+            // WAV header
+            const writeString = (offset, string) => {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            };
+            
+            writeString(0, 'RIFF');
+            view.setUint32(4, 36 + length * 2, true);
+            writeString(8, 'WAVE');
+            writeString(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, audioContext.sampleRate, true);
+            view.setUint32(28, audioContext.sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeString(36, 'data');
+            view.setUint32(40, length * 2, true);
+            
+            // Convert float samples to 16-bit PCM
+            const data = buffer.getChannelData(0);
+            let offset = 44;
+            for (let i = 0; i < length; i++) {
+                const sample = Math.max(-1, Math.min(1, data[i]));
+                view.setInt16(offset, sample * 0x7FFF, true);
+                offset += 2;
+            }
+            
+            // Create download link
+            const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
